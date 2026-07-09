@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="{{ current_lang }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ t.nav_pricing }} — ScanCrypt</title>
+    <style>
+      :root { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color-scheme: dark; color: #e5e7eb; }
+      body { margin:0; min-height:100vh; background:#000; color:#e5e7eb; }
+      .nav { display:flex; align-items:center; justify-content:space-between; padding:20px 40px; max-width:1200px; margin:0 auto; }
+      .brand { display:flex; align-items:center; gap:14px; }
+      .logo { width:56px; height:56px; display:inline-flex; align-items:center; justify-content:center; background:#fff; border-radius:10px; color:#4f46e5; font-weight:800; }
+      .nav-links { display:flex; gap:20px; align-items:center; margin:0 auto; }
+      .nav-links a { color:#d1d5db; text-decoration:none; font-weight:600; }
+      .nav-actions { display:flex; align-items:center; gap:12px; }
+      .lang { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; color:#d1d5db; background:rgba(255,255,255,0.08); border-radius:999px; text-decoration:none; border:1px solid rgba(209,213,219,0.16); }
+      .lang svg { width:18px; height:18px; }
+      .login-button { display:inline-flex; align-items:center; justify-content:center; padding:8px 16px; color:#e5e7eb; background:#4338ca; border-radius:999px; text-decoration:none; font-weight:700; border:1px solid rgba(255,255,255,0.12); }
+      .page { max-width:1200px; margin:0 auto; padding:32px 24px 64px; }
+      .hero { text-align:center; margin-top:40px; margin-bottom:40px; }
+      .hero h1 { margin:0; font-size:clamp(2.5rem,4vw,4rem); line-height:1.05; }
+      .hero p { max-width:760px; margin:18px auto 0; color:#d1d5db; font-size:1.05rem; }
+      .pricing-grid { display:grid; grid-template-columns:1fr; gap:24px; margin-top:40px; }
+      @media(min-width: 940px) { .pricing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+      .card { border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); border-radius:24px; padding:28px; display:flex; flex-direction:column; gap:18px; }
+      .card.popular { border-color:#4f46e5; box-shadow:0 20px 80px rgba(79,70,229,.18); }
+      .card h2 { margin:0; font-size:1.6rem; }
+      .card .price { font-size:2.4rem; font-weight:800; margin:0; }
+      .card .subtitle { color:#9ca3af; margin:0; }
+      .section-title { font-size:1.15rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:#a5b4fc; margin:0; }
+      .features, .includes { list-style:none; padding:0; margin:0; display:grid; gap:10px; }
+      .features li, .includes li { padding-left:20px; position:relative; color:#d1d5db; }
+      .features li::before, .includes li::before { content:'•'; position:absolute; left:0; color:#7c3aed; }
+      .button-row { display:flex; flex-wrap:wrap; gap:14px; margin-top:auto; }
+      .button { display:inline-flex; align-items:center; justify-content:center; padding:14px 20px; border-radius:14px; font-weight:700; text-decoration:none; border:none; cursor:pointer; }
+      .button.primary { background:#4f46e5; color:#fff; }
+      .button.secondary { border:1px solid rgba(255,255,255,0.16); color:#d1d5db; background:transparent; }
+      .disclaimer { color:#9ca3af; font-size:0.95rem; margin-top:8px; }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="brand">
+        {% if logo_url %}
+        <img src="{{ logo_url }}" alt="Company logo" style="width:56px;height:56px;border-radius:12px;object-fit:contain;background:#111827;padding:6px;" />
+        {% else %}
+        <div class="logo">SC</div>
+        {% endif %}
+        <div>
+          <div style="font-weight:800;color:inherit;">ScanCrypt</div>
+          <div style="font-size:0.85rem;color:inherit;opacity:0.8;">{{ t.tagline }}</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/">{{ t.nav_news }}</a>
+        <a href="/services">{{ t.nav_services }}</a>
+        <a href="/">{{ t.nav_about }}</a>
+        <a href="/pricing">{{ t.nav_pricing }}</a>
+        <a href="/">{{ t.nav_contact }}</a>
+      </div>
+      <div class="nav-actions">
+        <a class="lang" href="?lang={{ other_lang }}" title="{{ other_lang_title }}">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="#d1d5db" stroke-width="1.5" />
+            <path d="M4 12H20M12 4C16 4 18 6.5 18 12C18 17.5 16 20 12 20C8 20 6 17.5 6 12C6 6.5 8 4 12 4Z" stroke="#d1d5db" stroke-width="1.5"/>
+            <path d="M12 4C9.23858 4 7 6.23858 7 9C7 11.7614 9.23858 14 12 14C14.7614 14 17 11.7614 17 9C17 6.23858 14.7614 4 12 4Z" stroke="#d1d5db" stroke-width="1.5"/>
+          </svg>
+          {{ other_lang_label }}
+        </a>
+        <a class="login-button" href="/login">Login</a>
+      </div>
+    </header>
+    <main class="page">
+      <section class="hero">
+        <p class="section-title">Pricing</p>
+        <h1>Choose the plan that fits your team</h1>
+        <p>From Developer to Pro, ScanCrypt protects your code, secrets, cloud and compliance with post-quantum aware scanning.</p>
+      </section>
+
+      <section class="pricing-grid">
+        <article class="card">
+          <p class="section-title">Community</p>
+          <p class="price">€0<span style="font-size:1rem;font-weight:500;">/ Free forever</span></p>
+          <p class="subtitle">Perfect for researchers, students, and open-source developers</p>
+          <div>
+            <p class="section-title">Features</p>
+            <ul class="features">
+              <li>Algorithm detection (ML-DSA / ML-KEM)</li>
+              <li>Security level detection</li>
+              <li>Implementation type detection</li>
+              <li>Scan local C/C++ projects</li>
+              <li>Basic implementation checks</li>
+              <li>HTML security report</li>
+            </ul>
+          </div>
+          <div>
+            <p class="section-title">Includes</p>
+            <ul class="features">
+              <li>3 scans/day</li>
+              <li>1 project</li>
+              <li>Community support</li>
+            </ul>
+          </div>
+          <div class="button-row">
+            <a class="button primary" href="/scan">Start Free</a>
+          </div>
+        </article>
+
+        <article class="card popular">
+          <p class="section-title">Professional</p>
+          <p class="price">€79<span style="font-size:1rem;font-weight:500;">/ month</span></p>
+          <p class="subtitle">For engineers developing post-quantum cryptographic software</p>
+          <div>
+            <p class="section-title">Everything in Community, plus:</p>
+            <p style="margin-top:10px;">
+              <strong style="color:#a5b4fc;">Features</strong>
+            </p>
+            <ul class="features">
+              <li>Complete ML-DSA rule pack</li>
+              <li>Complete ML-KEM rule pack</li>
+              <li>Detection of implementation vulnerabilities</li>
+              <li>Security severity classification</li>
+              <li>Vulnerability explanations</li> 
+              <li>PDF reports</li>
+              <li>JSON reports</li>
+              <li>SARIF export</li>
+              <li>Email support</li>
+            </ul>
+          </div>
+          <div>
+            <p class="section-title">Includes</p>
+            <ul class="features">
+              <li>Unlimited scans</li>
+              <li>Unlimited projects</li>
+              <li>Rule updates</li>
+            </ul>
+          </div>
+          <div class="button-row">
+            <a class="button primary" href="https://example.com/buy?plan=professional">Start Free</a>
+          </div>
+          <p class="disclaimer">Most popular</p>
+        </article>
+
+        <article class="card">
+          <p class="section-title">Enterprise</p>
+          <p class="price">€399<span style="font-size:1rem;font-weight:500;">/ month</span></p>
+          <p class="subtitle">For organizations requiring advanced post-quantum security assurance</p>
+          <div>
+            <p class="section-title">Everything in Professional, plus:</p>
+            <p style="margin-top:10px;">
+              <strong style="color:#a5b4fc;">Features</strong>
+            </p>
+            <ul class="features">
+              <li>Side-channel analysis</li>
+              <li>Fault-injection vulnerability analysis</li>
+              <li>Constant-time verification</li>
+              <li>Advanced cryptographic rule packs</li>
+              <li>AI-assisted vulnerability explanations</li>
+              <li>Recommended mitigations and secure implementation guidance</li>
+              <li>Custom security rules</li>
+              <li>API access</li>
+              <li>Team management</li>
+              <li>On-premise deployment</li>
+              <li>Priority support</li>
+            </ul>
+          </div>
+          <div>
+            <p class="section-title">Includes</p>
+            <ul class="features">
+              <li>Unlimited scans</li>
+              <li>Unlimited projects</li>
+              <li>Dedicated rule updates</li>
+              <li>Early access to new algorithm support</li>
+            </ul>
+          </div>
+          <div class="button-row">
+            <a class="button secondary" href="mailto:sales@scancrypt.example">Contact Sales</a>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

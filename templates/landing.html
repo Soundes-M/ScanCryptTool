@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="{{ current_lang }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ t.title }}</title>
+    <style>
+      :root { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color-scheme: dark; color: #e5e7eb; }
+      body { margin:0; background: #000000; color: #e5e7eb; }
+      .nav { display:flex; align-items:center; justify-content:space-between; padding:20px 40px; max-width:1200px; margin:0 auto; }
+      .brand { display:flex; align-items:center; gap:14px; }
+      .logo { width:56px; height:56px; display:inline-flex; align-items:center; justify-content:center; background:#fff; border-radius:10px; box-shadow:0 6px 18px rgba(15,23,42,.08); font-weight:800; color:#4f46e5; }
+      .nav-links { display:flex; gap:20px; align-items:center; margin:0 auto; }
+      .nav-links a { color:#d1d5db; text-decoration:none; font-weight:600; }
+      .nav-actions { display:flex; align-items:center; gap:12px; }
+      .lang { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; color:#d1d5db; background:rgba(255,255,255,0.08); border-radius:999px; text-decoration:none; border:1px solid rgba(209,213,219,0.16); }
+      .lang svg { display:block; width:18px; height:18px; }
+      .login-button { display:inline-flex; align-items:center; justify-content:center; padding:8px 16px; color:#e5e7eb; background:#4338ca; border-radius:999px; text-decoration:none; font-weight:700; border:1px solid rgba(255,255,255,0.12); }
+      .hero { max-width:900px; margin:140px auto 0; padding:48px 32px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; text-align:center; }
+      .hero-left { width:100%; }
+      h1 { font-size: clamp(2rem, 4vw, 3.2rem); margin:0 0 12px; color:#e5e7eb; }
+      p.lead { margin:0 auto 20px; max-width:700px; color:#d1d5db; font-size:1.05rem; }
+      .cta { display:flex; gap:14px; margin-top:18px; justify-content:center; }
+      .btn { padding:12px 20px; border-radius:12px; font-weight:700; cursor:pointer; border:none; }
+      .btn-primary { background:#4f46e5; color:white; }
+      .btn-outline { background:transparent; color:#4f46e5; border:2px solid rgba(79,70,229,.12); }
+      /* Removed demo preview block; hero is centered */
+      .footer-note { max-width:1200px; margin:20px auto; padding:0 48px 48px; color:#6b7280; }
+      ul.bullets { margin:12px 0 0 18px; color:#374151; }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="brand">
+        {% if logo_url %}
+        <img src="{{ logo_url }}" alt="Company logo" style="width:56px;height:56px;display:inline-flex;border-radius:10px;object-fit:contain;background:#111827;padding:6px;" />
+        {% else %}
+        <div class="logo">SC</div>
+        {% endif %}
+        <div>
+          <div style="font-weight:800;color:inherit;">ScanCrypt</div>
+          <div style="font-size:0.85rem;color:inherit;opacity:0.8;">{{ t.tagline }}</div>
+        </div>
+      </div>
+
+      <div class="nav-links">
+        <a href="#news">{{ t.nav_news }}</a>
+        <a href="/services">{{ t.nav_services }}</a>
+        <a href="#about">{{ t.nav_about }}</a>
+        <a href="/pricing">{{ t.nav_pricing }}</a>
+        <a href="/contact">{{ t.nav_contact }}</a>
+      </div>
+      <div class="nav-actions">
+        <a class="lang" href="?lang={{ other_lang }}" title="{{ other_lang_title }}">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="#d1d5db" stroke-width="1.5" />
+            <path d="M4 12H20M12 4C16 4 18 6.5 18 12C18 17.5 16 20 12 20C8 20 6 17.5 6 12C6 6.5 8 4 12 4Z" stroke="#d1d5db" stroke-width="1.5"/>
+            <path d="M12 4C9.23858 4 7 6.23858 7 9C7 11.7614 9.23858 14 12 14C14.7614 14 17 11.7614 17 9C17 6.23858 14.7614 4 12 4Z" stroke="#d1d5db" stroke-width="1.5"/>
+          </svg>
+          {{ other_lang_label }}
+        </a>
+        <a class="login-button" href="/login">Login</a>
+      </div>
+    </header>
+
+    <main class="hero">
+      <div class="hero-left">
+        <h1>{{ t.landing_h1 }}</h1>
+        <p class="lead">{{ t.landing_lead }}</p>
+
+        <div class="cta">
+          <a href="/scan"><button class="btn btn-primary">{{ t.cta_start }}</button></a>
+          <a href="mailto:contact@scancrypt.example"><button class="btn btn-outline">{{ t.cta_demo }}</button></a>
+        </div>
+
+      </div>
+
+      
+    </main>
+
+    
+  </body>
+</html>

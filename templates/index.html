@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ t.index_title }}</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #000000;
+        color: #e5e7eb;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+      .app-shell { width: 100%; max-width: 980px; }
+      .hero { padding: 32px 36px; border-radius: 28px 28px 20px 20px; background: linear-gradient(180deg, #4f46e5 0%, #6366f1 100%); color: white; box-shadow: 0 30px 80px rgba(15, 23, 42, 0.18); }
+      .hero h1 { margin: 0 0 12px; font-size: clamp(2rem, 2.4vw, 2.8rem); letter-spacing: -0.04em; }
+      .hero p { max-width: 760px; margin: 0; line-height: 1.7; opacity: 0.92; }
+      .card { margin-top: -24px; overflow: hidden; border-radius: 28px; background: white; box-shadow: 0 36px 80px rgba(15, 23, 42, 0.12); }
+      .card-body { padding: 32px; }
+      .form-row { display: grid; gap: 14px; }
+      label { font-size: 0.95rem; font-weight: 600; color: #374151; }
+      .file-input-wrapper { display: grid; gap: 12px; }
+      input[type="file"] { border-radius: 16px; border: 1px solid #d1d5db; padding: 14px 16px; cursor: pointer; background: #f8fafc; }
+      .hint { color: #6b7280; font-size: 0.94rem; }
+      .button-group { display: flex; justify-content: flex-end; margin-top: 24px; }
+      button { border: none; color: white; background: #4338ca; border-radius: 16px; padding: 14px 24px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform .16s ease, background .16s ease; }
+      button:hover { background: #3730a3; transform: translateY(-1px); }
+      .alert { border-radius: 16px; padding: 16px 18px; margin-top: 20px; font-size: 0.96rem; }
+      .alert-warning { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+      .alert-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+      .result-card { margin-top: 32px; border-radius: 22px; background: #fafafb; border: 1px solid #e5e7eb; padding: 28px; }
+      .result-grid { display: grid; gap: 18px; }
+      .result-item { display: grid; gap: 8px; }
+      .result-item .label { font-size: 0.88rem; font-weight: 700; color: #4b5563; }
+      .result-item .value { font-size: 1rem; color: #111827; line-height: 1.6; }
+      .result-title { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; }
+      .badge { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 6px 14px; background: rgba(99, 102, 241, 0.12); color: #4338ca; font-weight: 700; font-size: 0.87rem; }
+      .summary-line { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; color: #374151; }
+      .summary-pill { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 999px; padding: 8px 14px; font-size: 0.93rem; }
+      .project-summary { background: #000; border: 1px solid #333; border-radius: 16px; padding: 24px; margin-top: 20px; color: #e5e7eb; }
+      .summary-header { font-size: 1.2rem; font-weight: 700; color: #a5b4fc; margin-bottom: 8px; }
+      .summary-divider { color: #444; margin-bottom: 16px; font-size: 0.9rem; letter-spacing: 2px; }
+      .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
+      .summary-item { display: flex; flex-direction: column; }
+      .summary-label { font-size: 0.9rem; color: #9ca3af; margin-bottom: 4px; }
+      .summary-value { font-size: 1rem; color: #e5e7eb; font-weight: 600; }
+      .evidence-section { margin-top: 20px; border-top: 1px solid #333; padding-top: 16px; }
+      .evidence-header { font-size: 0.95rem; font-weight: 700; color: #a5b4fc; margin-bottom: 12px; }
+      .evidence-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+      .evidence-list li { color: #d1d5db; font-size: 0.9rem; }
+      table { width: 100%; border-collapse: collapse; margin-top: 18px; }
+      th, td { text-align: left; padding: 14px 12px; border-bottom: 1px solid #e5e7eb; }
+      th { font-size: 0.95rem; font-weight: 700; color: #374151; }
+      td { font-size: 0.96rem; color: #111827; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <section class="hero">
+        <h1>{{ t.tool_title }}</h1>
+        <p>{{ t.tool_description }}</p>
+      </section>
+
+      <!-- 'Why ScanCrypt?' and 'Supports' sections removed per user request -->
+
+      <article class="card">
+        <div class="card-body">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+
+          <form method="post" enctype="multipart/form-data">
+            <div class="form-row">
+              <div class="file-input-wrapper">
+                <label for="source_files">{{ t.upload_label }}</label>
+                <input id="source_files" name="source_files" type="file" webkitdirectory directory multiple accept=".c,.h,.cpp,.cc" />
+                <div class="hint">{{ t.upload_hint }}</div>
+              </div>
+            </div>
+
+            <div class="button-group">
+              <button type="submit">{{ t.analyze_button }}</button>
+            </div>
+          </form>
+
+                    {% if result %}
+            <section class="result-card">
+                <div class="result-title">
+                <span class="badge">{{ t.analysis_complete }}</span>
+                <span>{{ t.folder_label }} {{ result.folder_name }}</span>
+              </div>
+
+              <div class="project-summary">
+                <div class="summary-header">Project Summary</div>
+                <div class="summary-divider">──────────────────────────────</div>
+                
+                <div class="summary-grid">
+                  <div class="summary-item">
+                    <div class="summary-label">Project Name</div>
+                    <div class="summary-value">{{ result.folder_name }}</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">Algorithm</div>
+                    <div class="summary-value">{{ result.overall_algorithm }}</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">Security Level</div>
+                    <div class="summary-value">{{ result.overall_security_level }}</div>
+                    {% for item in result.missing_information %}
+                      {% if 'KYBER_K' in item or 'variant' in item.lower() %}
+                        <div style="margin-top:6px; color:#9ca3af; font-size:0.92rem;">Reason: {{ item }}</div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">Implementation Type</div>
+                    <div class="summary-value">{{ result.overall_implementation_type }}</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">Programming Language</div>
+                    <div class="summary-value">C/C++</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">Files</div>
+                    <div class="summary-value">{{ result.total_files }}</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">C/C++ Source Files</div>
+                    <div class="summary-value">{{ result.c_files }}</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">Header Files</div>
+                    <div class="summary-value">{{ result.h_files }}</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">Lines of Code</div>
+                    <div class="summary-value">{{ result.total_loc }}</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">Build System</div>
+                    <div class="summary-value">{{ result.build_system }}</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-label">Analysis Confidence</div>
+                    <div class="summary-value">{{ result.confidence }}</div>
+                  </div>
+                </div>
+
+                {% if result.algorithm_evidence or result.implementation_evidence or result.missing_information %}
+                <div class="evidence-section">
+                  <div class="evidence-header">Detection Evidence</div>
+
+                  {% if result.algorithm_evidence %}
+                  <div style="margin-bottom:10px;">
+                    <div class="evidence-header" style="font-size:0.92rem; color:#9ca3af; font-weight:700; margin-bottom:6px;">Algorithm Evidence</div>
+                    <ul class="evidence-list">
+                      {% for item in result.algorithm_evidence %}
+                      <li>• {{ item }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  {% endif %}
+
+                  {% if result.implementation_evidence %}
+                  <div style="margin-top:12px;">
+                    <div class="evidence-header" style="font-size:0.92rem; color:#9ca3af; font-weight:700; margin-bottom:6px;">Implementation Evidence</div>
+                    <ul class="evidence-list">
+                      {% for item in result.implementation_evidence %}
+                      <li>• {{ item }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  {% endif %}
+
+                  {% if result.missing_information %}
+                  <div style="margin-top:12px;">
+                    <div class="evidence-header" style="font-size:0.92rem; color:#fca5a5; font-weight:700; margin-bottom:6px;">Missing Information</div>
+                    <ul class="evidence-list">
+                      {% for item in result.missing_information %}
+                      <li>• {{ item }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  {% endif %}
+
+                </div>
+                {% endif %}
+            </section>
+          {% endif %}
+
+        </div>
+      </article>
+    </div>
+  </body>
+</html>

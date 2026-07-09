@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="{{ current_lang }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contact — ScanCrypt</title>
+    <style>
+      :root { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color-scheme: dark; color: #e5e7eb; }
+      body { margin:0; min-height:100vh; background:#000; color:#e5e7eb; position:relative; }
+      body::before { content:''; position:fixed; top:0; left:0; right:0; bottom:0; background-image:url('/static/worldmap.jpg'); background-size:cover; background-position:center; background-attachment:fixed; opacity:0.2; z-index:1; pointer-events:none; }
+      .nav { display:flex; align-items:center; justify-content:space-between; padding:20px 40px; max-width:1200px; margin:0 auto; position:relative; z-index:10; }
+      .brand { display:flex; align-items:center; gap:14px; }
+      .logo { width:56px; height:56px; display:inline-flex; align-items:center; justify-content:center; background:#fff; border-radius:10px; color:#4f46e5; font-weight:800; }
+      .nav-links { display:flex; gap:20px; align-items:center; margin:0 auto; }
+      .nav-links a { color:#d1d5db; text-decoration:none; font-weight:600; }
+      .nav-actions { display:flex; align-items:center; gap:12px; }
+      .lang { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; color:#d1d5db; background:rgba(255,255,255,0.08); border-radius:999px; text-decoration:none; border:1px solid rgba(209,213,219,0.16); }
+      .lang svg { width:18px; height:18px; }
+      .login-button { display:inline-flex; align-items:center; justify-content:center; padding:8px 16px; color:#e5e7eb; background:#4338ca; border-radius:999px; text-decoration:none; font-weight:700; border:1px solid rgba(255,255,255,0.12); }
+      
+      .page { max-width:1200px; margin:0 auto; padding:60px 24px; position:relative; z-index:2; }
+      
+      .hero { text-align:center; margin-bottom:60px; }
+      .hero h1 { margin:0; font-size:clamp(2.5rem,4vw,4rem); line-height:1.05; text-shadow:0 2px 8px rgba(0,0,0,0.8); }
+      .hero p { max-width:760px; margin:18px auto 0; color:#d1d5db; font-size:1.05rem; text-shadow:0 1px 4px rgba(0,0,0,0.7); }
+      
+      .contact-grid { display:grid; grid-template-columns:1fr; gap:40px; margin-top:50px; }
+      @media(min-width: 940px) { .contact-grid { grid-template-columns: 1fr 1fr; } }
+      
+      .contact-info { display:flex; flex-direction:column; height:100%; }
+      .contact-method { margin-bottom:40px; }
+      .contact-method h3 { margin:0 0 8px; font-size:1.1rem; color:#a5b4fc; text-shadow:0 1px 3px rgba(0,0,0,0.7); }
+      .contact-method p { margin:0; color:#d1d5db; font-size:0.95rem; text-shadow:0 1px 2px rgba(0,0,0,0.5); }
+      .contact-method a { color:#4f46e5; text-decoration:none; font-weight:600; }
+      .contact-method a:hover { text-decoration:underline; }
+      
+      .form-section { display:flex; flex-direction:column; height:100%; }
+      .form-group { margin-bottom:20px; }
+      .form-group label { display:block; margin-bottom:6px; font-weight:600; font-size:0.95rem; text-shadow:0 1px 2px rgba(0,0,0,0.5); }
+      .form-group input, .form-group textarea, .form-group select { width:100%; padding:12px; border:2px solid rgba(79,70,229,0.4); background:rgba(0,0,0,0.6); border-radius:8px; color:#e5e7eb; font-family:inherit; font-size:0.95rem; box-sizing:border-box; box-shadow:0 4px 12px rgba(0,0,0,0.5); }
+      .form-group input::placeholder, .form-group textarea::placeholder { color:#9ca3af; }
+      .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline:none; border-color:#4f46e5; background:rgba(79,70,229,0.1); box-shadow:0 0 12px rgba(79,70,229,0.4); }
+      .form-group textarea { resize:vertical; min-height:240px; }
+      
+      .button { display:inline-flex; align-items:center; justify-content:center; padding:12px 24px; border-radius:8px; font-weight:700; text-decoration:none; border:none; cursor:pointer; font-size:0.95rem; }
+      .button.primary { background:#4f46e5; color:#fff; width:100%; }
+      .button.primary:hover { background:#4338ca; }
+      
+      .section-title { font-size:1rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:#a5b4fc; margin:0 0 12px; }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="brand">
+        {% if logo_url %}
+        <img src="{{ logo_url }}" alt="Company logo" style="width:56px;height:56px;border-radius:12px;object-fit:contain;background:#111827;padding:6px;" />
+        {% else %}
+        <div class="logo">SC</div>
+        {% endif %}
+        <div>
+          <div style="font-weight:800;color:inherit;">ScanCrypt</div>
+          <div style="font-size:0.85rem;color:inherit;opacity:0.8;">{{ t.tagline }}</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="/">{{ t.nav_news }}</a>
+        <a href="/">{{ t.nav_services }}</a>
+        <a href="/">{{ t.nav_about }}</a>
+        <a href="/pricing">{{ t.nav_pricing }}</a>
+        <a href="/contact">{{ t.nav_contact }}</a>
+      </div>
+      <div class="nav-actions">
+        <a class="lang" href="?lang={{ other_lang }}" title="{{ other_lang_title }}">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="#d1d5db" stroke-width="1.5" />
+            <path d="M4 12H20M12 4C16 4 18 6.5 18 12C18 17.5 16 20 12 20C8 20 6 17.5 6 12C6 6.5 8 4 12 4Z" stroke="#d1d5db" stroke-width="1.5"/>
+            <path d="M12 4C9.23858 4 7 6.23858 7 9C7 11.7614 9.23858 14 12 14C14.7614 14 17 11.7614 17 9C17 6.23858 14.7614 4 12 4Z" stroke="#d1d5db" stroke-width="1.5"/>
+          </svg>
+          {{ other_lang_label }}
+        </a>
+        <a class="login-button" href="/login">Login</a>
+      </div>
+    </header>
+    
+    <main class="page">
+      <section class="hero">
+        <p class="section-title">Get in Touch</p>
+        <h1>Contact Our Team</h1>
+        <p>Have questions about ScanCrypt? We're here to help. Reach out to our team and we'll get back to you as soon as possible.</p>
+      </section>
+
+      <section class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-method">
+            <h3>What is ScanCrypt?</h3>
+            <p>ScanCrypt is a post-quantum cryptography security scanner that detects and analyzes ML-DSA and ML-KEM implementations in your codebase, identifying implementation vulnerabilities and security issues.</p>
+          </div>
+          
+          <div class="contact-method">
+            <h3>Which programming languages are supported?</h3>
+            <p>ScanCrypt currently supports C and C++ source files. We scan local projects and analyze portable implementations, optimized variants (AVX2), and embedded/ARM Cortex-M deployments.</p>
+          </div>
+          
+          <div class="contact-method">
+            <h3>How do I get started?</h3>
+            <p>You can start with our free Community plan by uploading a C/C++ project folder. You'll get immediate analysis of algorithm detection, security levels, and implementation types with an HTML report.</p>
+          </div>
+          
+          <div class="contact-method">
+            <h3>What's included in the Professional plan?</h3>
+            <p>Professional includes unlimited scans, complete ML-DSA and ML-KEM rule packs, vulnerability detection, severity classification, PDF/JSON/SARIF export, and email support at €79/month.</p>
+          </div>
+          
+          <div class="contact-method">
+            <h3>Do you offer on-premise deployment?</h3>
+            <p>Yes, on-premise deployment is available with our Enterprise plan. Enterprise also includes side-channel analysis, fault-injection detection, custom rules, API access, and priority support.</p>
+          </div>
+          
+          <div class="contact-method">
+            <h3>Can I test ScanCrypt for free?</h3>
+            <p>Absolutely! Our Community tier is free forever and includes core analysis features, HTML reports, and up to 3 scans per day. No credit card required.</p>
+          </div>
+        </div>
+        
+        <div class="form-section">
+          <form method="post" action="/contact" style="display:flex;flex-direction:column;gap:20px;">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+            
+            <button type="submit" class="button primary">Send Message</button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
