@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Services — ScanCrypt</title>
+    <title>{{ "Services" if current_lang == "en" else "Dienstleistungen" }} — ScanCrypt</title>
     <style>
       :root { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color-scheme: dark; color: #e5e7eb; }
       body { margin:0; min-height:100vh; background:#000; color:#e5e7eb; }
@@ -50,9 +50,9 @@
         </div>
       </div>
       <div class="nav-links">
-        <a href="/">News</a>
-        <a href="/services">Services</a>
-        <a href="/">About</a>
+        <a href="/">{{ t.nav_news }}</a>
+        <a href="/services">{{ t.nav_services }}</a>
+        <a href="/about">{{ t.nav_about }}</a>
         <a href="/pricing">{{ t.nav_pricing }}</a>
         <a href="/contact">{{ t.nav_contact }}</a>
       </div>
@@ -65,66 +65,66 @@
           </svg>
           {{ other_lang_label }}
         </a>
-        <a class="login-button" href="/login">Login</a>
+        <a class="login-button" href="/login">{{ "Login" if current_lang == "en" else "Anmelden" }}</a>
       </div>
     </header>
     
     <main class="page">
       <section class="hero">
-        <p class="section-title">Services</p>
-        <h1>Post-Quantum Cryptography Security Services</h1>
-        <p>Comprehensive analysis, vulnerability detection, and research-backed guidance for secure post-quantum implementations.</p>
+        <p class="section-title">{{ "Services" if current_lang == "en" else "Dienstleistungen" }}</p>
+        <h1>{{ "Post-Quantum Cryptography Security Services" if current_lang == "en" else "Sicherheitsdienste für Post-Quanten-Kryptographie" }}</h1>
+        <p>{{ "Comprehensive analysis, vulnerability detection, and research-backed guidance for secure post-quantum implementations." if current_lang == "en" else "Umfassende Analyse, Schwachstellenerkennung und forschungsbasierte Empfehlungen für sichere Post-Quanten-Implementierungen." }}</p>
       </section>
 
       <section class="services-grid">
         <article class="service-card">
-          <h2>Automated Security Analysis</h2>
-          <p class="subtitle">Detect implementation vulnerabilities before deployment</p>
-          <p>ScanCrypt performs static security analysis of post-quantum cryptographic implementations, helping developers identify vulnerabilities during development rather than after deployment. The platform analyzes ML-DSA (Dilithium) and ML-KEM (Kyber) implementations to detect security weaknesses that may compromise confidentiality, integrity, or correctness.</p>
+          <h2>{{ "Automated Security Analysis" if current_lang == "en" else "Automatisierte Sicherheitsanalyse" }}</h2>
+          <p class="subtitle">{{ "Detect implementation vulnerabilities before deployment" if current_lang == "en" else "Implementierungsschwachstellen vor dem Deployment erkennen" }}</p>
+          <p>{{ "ScanCrypt performs static security analysis of post-quantum cryptographic implementations, helping developers identify vulnerabilities during development rather than after deployment. The platform analyzes ML-DSA (Dilithium) and ML-KEM (Kyber) implementations to detect security weaknesses that may compromise confidentiality, integrity, or correctness." if current_lang == "en" else "ScanCrypt führt statische Sicherheitsanalysen post-quantenkryptographischer Implementierungen durch und hilft, Schwachstellen früh in der Entwicklung zu erkennen. Die Plattform analysiert ML-DSA (Dilithium) und ML-KEM (Kyber), um Schwächen zu finden, die Vertraulichkeit, Integrität oder Korrektheit gefährden könnten." }}</p>
         </article>
 
         <article class="service-card">
-          <h2>Algorithm & Implementation Detection</h2>
-          <p class="subtitle">Understand what your project contains</p>
-          <p>Before performing a security assessment, ScanCrypt automatically identifies the implemented post-quantum algorithm, determines its security level, and classifies the implementation type. This provides immediate insight into the analyzed project and ensures that the appropriate security rules are applied.</p>
+          <h2>{{ "Algorithm & Implementation Detection" if current_lang == "en" else "Algorithmus- und Implementierungserkennung" }}</h2>
+          <p class="subtitle">{{ "Understand what your project contains" if current_lang == "en" else "Verstehen, was Ihr Projekt enthält" }}</p>
+          <p>{{ "Before performing a security assessment, ScanCrypt automatically identifies the implemented post-quantum algorithm, determines its security level, and classifies the implementation type. This provides immediate insight into the analyzed project and ensures that the appropriate security rules are applied." if current_lang == "en" else "Vor einer Sicherheitsbewertung identifiziert ScanCrypt automatisch den implementierten Post-Quanten-Algorithmus, bestimmt die Sicherheitsstufe und klassifiziert den Implementierungstyp. Das liefert sofortige Transparenz und stellt sicher, dass passende Sicherheitsregeln angewendet werden." }}</p>
         </article>
 
         <article class="service-card">
-          <h2>Implementation Vulnerability Detection</h2>
-          <p class="subtitle">Identify cryptographic implementation mistakes</p>
-          <p>Unlike general-purpose static analysis tools, ScanCrypt focuses on implementation-level security issues specific to post-quantum cryptography. The platform detects incorrect coding practices, missing security checks, unsafe parameter handling, improper randomness usage, memory-related risks, and other implementation vulnerabilities.</p>
+          <h2>{{ "Implementation Vulnerability Detection" if current_lang == "en" else "Erkennung von Implementierungsschwachstellen" }}</h2>
+          <p class="subtitle">{{ "Identify cryptographic implementation mistakes" if current_lang == "en" else "Kryptographische Implementierungsfehler erkennen" }}</p>
+          <p>{{ "Unlike general-purpose static analysis tools, ScanCrypt focuses on implementation-level security issues specific to post-quantum cryptography. The platform detects incorrect coding practices, missing security checks, unsafe parameter handling, improper randomness usage, memory-related risks, and other implementation vulnerabilities." if current_lang == "en" else "Im Gegensatz zu allgemeinen Static-Analysis-Tools konzentriert sich ScanCrypt auf implementierungsspezifische Sicherheitsprobleme der Post-Quanten-Kryptographie. Die Plattform erkennt fehlerhafte Codierung, fehlende Sicherheitsprüfungen, unsichere Parameterverarbeitung, problematische Zufallsnutzung und weitere Schwachstellen." }}</p>
         </article>
 
         <article class="service-card">
-          <h2>Research-Based Mitigation Guidance</h2>
-          <p class="subtitle">Practical recommendations for secure implementations</p>
-          <p>Every detected vulnerability is accompanied by a technical explanation and research-based mitigation guidance. ScanCrypt not only highlights potential weaknesses but also provides recommendations to help developers implement secure and standards-compliant countermeasures.</p>
+          <h2>{{ "Research-Based Mitigation Guidance" if current_lang == "en" else "Forschungsbasierte Handlungsempfehlungen" }}</h2>
+          <p class="subtitle">{{ "Practical recommendations for secure implementations" if current_lang == "en" else "Praxisnahe Empfehlungen für sichere Implementierungen" }}</p>
+          <p>{{ "Every detected vulnerability is accompanied by a technical explanation and research-based mitigation guidance. ScanCrypt not only highlights potential weaknesses but also provides recommendations to help developers implement secure and standards-compliant countermeasures." if current_lang == "en" else "Jede erkannte Schwachstelle wird mit technischer Erklärung und forschungsbasierten Gegenmaßnahmen ergänzt. ScanCrypt zeigt nicht nur Risiken auf, sondern liefert konkrete Empfehlungen für sichere und standardkonforme Implementierungen." }}</p>
         </article>
 
         <article class="service-card">
-          <div class="enterprise-badge">Enterprise</div>
-          <h2>Side-Channel Security Analysis</h2>
-          <p class="subtitle">Detect leakage before attackers do</p>
-          <p>Enterprise customers benefit from advanced analysis designed to identify implementation patterns that may introduce timing or other side-channel leakages. These checks help organizations strengthen the resistance of their cryptographic software against practical attacks.</p>
+          <div class="enterprise-badge">{{ "Enterprise" if current_lang == "en" else "Enterprise" }}</div>
+          <h2>{{ "Side-Channel Security Analysis" if current_lang == "en" else "Seitenkanal-Sicherheitsanalyse" }}</h2>
+          <p class="subtitle">{{ "Detect leakage before attackers do" if current_lang == "en" else "Leckagen erkennen, bevor Angreifer sie ausnutzen" }}</p>
+          <p>{{ "Enterprise customers benefit from advanced analysis designed to identify implementation patterns that may introduce timing or other side-channel leakages. These checks help organizations strengthen the resistance of their cryptographic software against practical attacks." if current_lang == "en" else "Enterprise-Kunden profitieren von erweiterten Analysen, die Implementierungsmuster mit Timing- oder anderen Seitenkanal-Leckagen identifizieren. Diese Prüfungen erhöhen die Widerstandsfähigkeit kryptographischer Software gegenüber praktischen Angriffen." }}</p>
         </article>
 
         <article class="service-card">
-          <div class="enterprise-badge">Enterprise</div>
-          <h2>Fault Injection Security Analysis</h2>
-          <p class="subtitle">Evaluate resilience against physical attacks</p>
-          <p>ScanCrypt analyzes implementations for coding patterns that may expose them to fault-injection attacks. The platform helps developers identify missing integrity checks, unsafe assumptions, and implementation weaknesses that could be exploited through induced faults.</p>
+          <div class="enterprise-badge">{{ "Enterprise" if current_lang == "en" else "Enterprise" }}</div>
+          <h2>{{ "Fault Injection Security Analysis" if current_lang == "en" else "Fault-Injection-Sicherheitsanalyse" }}</h2>
+          <p class="subtitle">{{ "Evaluate resilience against physical attacks" if current_lang == "en" else "Resilienz gegen physische Angriffe bewerten" }}</p>
+          <p>{{ "ScanCrypt analyzes implementations for coding patterns that may expose them to fault-injection attacks. The platform helps developers identify missing integrity checks, unsafe assumptions, and implementation weaknesses that could be exploited through induced faults." if current_lang == "en" else "ScanCrypt analysiert Implementierungen auf Muster, die Fault-Injection-Angriffe begünstigen. Die Plattform hilft dabei, fehlende Integritätsprüfungen, unsichere Annahmen und ausnutzbare Schwachstellen zu identifizieren." }}</p>
         </article>
 
         <article class="service-card">
-          <h2>Security Reporting</h2>
-          <p class="subtitle">Clear, actionable reports</p>
-          <p>Generate professional security reports that summarize detected vulnerabilities, their severity, affected source files, technical explanations, and recommended mitigations. Reports are designed to support both engineering teams and security reviews.</p>
+          <h2>{{ "Security Reporting" if current_lang == "en" else "Security Reporting" }}</h2>
+          <p class="subtitle">{{ "Clear, actionable reports" if current_lang == "en" else "Klare, umsetzbare Berichte" }}</p>
+          <p>{{ "Generate professional security reports that summarize detected vulnerabilities, their severity, affected source files, technical explanations, and recommended mitigations. Reports are designed to support both engineering teams and security reviews." if current_lang == "en" else "Erstellen Sie professionelle Sicherheitsberichte mit erkannten Schwachstellen, Schweregrad, betroffenen Dateien, technischen Erklärungen und empfohlenen Maßnahmen. Die Berichte unterstützen sowohl Entwicklungsteams als auch Security-Reviews." }}</p>
         </article>
 
         <article class="service-card">
-          <h2>Continuous Rule Updates</h2>
-          <p class="subtitle">Keeping pace with post-quantum cryptography</p>
-          <p>As standards evolve and new implementation weaknesses are discovered, ScanCrypt continuously expands its rule base to provide up-to-date security analysis for supported algorithms.</p>
+          <h2>{{ "Continuous Rule Updates" if current_lang == "en" else "Kontinuierliche Regel-Updates" }}</h2>
+          <p class="subtitle">{{ "Keeping pace with post-quantum cryptography" if current_lang == "en" else "Immer aktuell mit der Post-Quanten-Kryptographie" }}</p>
+          <p>{{ "As standards evolve and new implementation weaknesses are discovered, ScanCrypt continuously expands its rule base to provide up-to-date security analysis for supported algorithms." if current_lang == "en" else "Wenn sich Standards weiterentwickeln und neue Implementierungsschwächen entdeckt werden, erweitert ScanCrypt kontinuierlich seine Regelbasis für aktuelle Sicherheitsanalysen der unterstützten Algorithmen." }}</p>
         </article>
       </section>
     </main>

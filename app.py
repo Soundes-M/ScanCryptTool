@@ -530,6 +530,7 @@ def index():
 
             report_payload = {
                 "project_name": folder_name,
+                "client_name": "Client X",
                 "analysis_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "tool_version": "1.0",
                 "algorithm": project_result.get("algorithm", "Unknown"),
@@ -593,7 +594,19 @@ def index():
     logo_url = url_for("static", filename=f"uploads/{logo_fn}") if logo_fn else None
     lang = get_lang_from_request()
     t = TRANSLATIONS.get(lang, TRANSLATIONS["en"])
-    return render_template("index.html", result=result, logo_url=logo_url, t=t)
+    other_lang = "de" if lang == "en" else "en"
+    other_lang_label = "DE" if lang == "en" else "EN"
+    other_lang_title = "Deutsch" if lang == "en" else "English"
+    return render_template(
+        "index.html",
+        result=result,
+        logo_url=logo_url,
+        t=t,
+        current_lang=lang,
+        other_lang=other_lang,
+        other_lang_label=other_lang_label,
+        other_lang_title=other_lang_title,
+    )
 
 
 @app.route("/", methods=["GET"])
@@ -627,6 +640,26 @@ def pricing():
     other_lang_title = "Deutsch" if lang == "en" else "English"
     return render_template(
         "pricing.html",
+        logo_url=logo_url,
+        t=t,
+        current_lang=lang,
+        other_lang=other_lang,
+        other_lang_label=other_lang_label,
+        other_lang_title=other_lang_title,
+    )
+
+
+@app.route("/about", methods=["GET"])
+def about():
+    logo_fn = get_logo_filename()
+    logo_url = url_for("static", filename=f"uploads/{logo_fn}") if logo_fn else None
+    lang = get_lang_from_request()
+    t = TRANSLATIONS.get(lang, TRANSLATIONS["en"])
+    other_lang = "de" if lang == "en" else "en"
+    other_lang_label = "DE" if lang == "en" else "EN"
+    other_lang_title = "Deutsch" if lang == "en" else "English"
+    return render_template(
+        "about.html",
         logo_url=logo_url,
         t=t,
         current_lang=lang,

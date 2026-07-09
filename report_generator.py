@@ -10,6 +10,7 @@ from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
+from reportlab.lib.utils import ImageReader
 from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 PAGE_WIDTH, PAGE_HEIGHT = A4
@@ -135,6 +136,8 @@ def normalize_results(raw: dict[str, Any]) -> dict[str, Any]:
     return {
         "project_name": raw.get("project_name") or raw.get("folder_name") or "Unknown Project",
         "analysis_date": raw.get("analysis_date") or datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "client_name": raw.get("client_name") or "Client X",
+        "logo_path": raw.get("logo_path"),
         "tool_version": raw.get("tool_version") or raw.get("scancrypt_version") or "1.0",
         "algorithm": raw.get("algorithm") or raw.get("overall_algorithm") or "Unknown",
         "security_level": raw.get("security_level") or raw.get("overall_security_level") or "Unknown",
@@ -165,6 +168,21 @@ def normalize_results(raw: dict[str, Any]) -> dict[str, Any]:
             "Hardware / FPGA",
         ],
     }
+
+
+def _resolve_logo_path(possible_logo_path: str | None) -> str | None:
+    if possible_logo_path:
+        p = Path(possible_logo_path)
+        if p.exists() and p.is_file():
+            return str(p)
+
+    uploads_dir = Path(__file__).resolve().parent / "static" / "uploads"
+    if not uploads_dir.exists():
+        return None
+    for logo in uploads_dir.glob("company_logo.*"):
+        if logo.is_file():
+            return str(logo)
+    return None
 
 
 def badge(text: str, severity: str | None = None) -> Table:
@@ -222,6 +240,69 @@ def get_footer(canvas, doc):
     page_text = f"Page {doc.page}"
     canvas.drawRightString(PAGE_WIDTH - 20 * mm, 15 * mm, page_text)
     canvas.restoreState()
+
+
+def _draw_page_branding(canvas, doc, normalized_results: dict[str, Any]):
+    page_w, page_h = A4
+    logo_path = _resolve_logo_path(normalized_results.get("logo_path"))
+
+    # Subtle background logo on each page
+    if logo_path:
+        try:
+            canvas.saveState()
+            if hasattr(canvas, "setFillAlpha"):
+                canvas.setFillAlpha(0.08)
+            logo_w = 110 * mm
+            logo_h = 110 * mm
+            x = (page_w - logo_w) / 2
+            y = (page_h - logo_h) / 2
+            canvas.drawImage(
+                ImageReader(logo_path),
+                x,
+                y,
+                width=logo_w,
+                height=logo_h,
+                preserveAspectRatio=True,
+                mask="auto",
+            )
+            canvas.restoreState()
+        except Exception:
+            # Fallback to subtle text mark
+            canvas.saveState()
+            if hasattr(canvas, "setFillAlpha"):
+                canvas.setFillAlpha(0.05)
+            canvas.setFillColor(colors.HexColor("#94A3B8"))
+            canvas.setFont("Helvetica-Bold", 46)
+            canvas.drawCentredString(page_w / 2, page_h / 2, "ScanCrypt")
+            canvas.restoreState()
+    else:
+        canvas.saveState()
+        if hasattr(canvas, "setFillAlpha"):
+            canvas.setFillAlpha(0.05)
+        canvas.setFillColor(colors.HexColor("#94A3B8"))
+        canvas.setFont("Helvetica-Bold", 46)
+        canvas.drawCentredString(page_w / 2, page_h / 2, "ScanCrypt")
+        canvas.restoreState()
+
+    # Diagonal watermark with date/time + client
+    watermark_date = safe_text(normalized_results.get("analysis_date") or datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    watermark_client = safe_text(normalized_results.get("client_name") or "Client X")
+    watermark_text = f"{watermark_client} | {watermark_date}"
+
+    canvas.saveState()
+    if hasattr(canvas, "setFillAlpha"):
+        canvas.setFillAlpha(0.13)
+    canvas.setFillColor(colors.HexColor("#CBD5E1"))
+    canvas.setFont("Helvetica-Bold", 24)
+    canvas.translate(page_w / 2, page_h / 2)
+    canvas.rotate(35)
+    canvas.drawCentredString(0, 0, watermark_text)
+    canvas.restoreState()
+
+
+def _on_page(canvas, doc, normalized_results: dict[str, Any]):
+    _draw_page_branding(canvas, doc, normalized_results)
+    get_footer(canvas, doc)
 
 
 def create_cover_page(results: dict[str, Any]) -> list[Any]:
@@ -582,12 +663,17 @@ def generate_scan_report(results: dict[str, Any], filename: str) -> None:
     story.extend(create_statistics(results))
     story.extend(create_appendix(results))
 
-    doc.build(story, onFirstPage=get_footer, onLaterPages=get_footer)
+    doc.build(
+        story,
+        onFirstPage=lambda c, d: _on_page(c, d, results),
+        onLaterPages=lambda c, d: _on_page(c, d, results),
+    )
 
 
 if __name__ == "__main__":
     example = {
         "project_name": "m4fstack",
+        "client_name": "Client X",
         "algorithm": "ML-KEM / Kyber",
         "security_level": "Unknown ML-KEM Variant",
         "implementation_type": "Masked Implementation",

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Contact — ScanCrypt</title>
+    <title>{{ "Contact" if current_lang == "en" else "Kontakt" }} — ScanCrypt</title>
     <style>
       :root { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color-scheme: dark; color: #e5e7eb; }
       body { margin:0; min-height:100vh; background:#000; color:#e5e7eb; position:relative; }
@@ -64,8 +64,8 @@
       </div>
       <div class="nav-links">
         <a href="/">{{ t.nav_news }}</a>
-        <a href="/">{{ t.nav_services }}</a>
-        <a href="/">{{ t.nav_about }}</a>
+        <a href="/services">{{ t.nav_services }}</a>
+        <a href="/about">{{ t.nav_about }}</a>
         <a href="/pricing">{{ t.nav_pricing }}</a>
         <a href="/contact">{{ t.nav_contact }}</a>
       </div>
@@ -78,73 +78,73 @@
           </svg>
           {{ other_lang_label }}
         </a>
-        <a class="login-button" href="/login">Login</a>
+        <a class="login-button" href="/login">{{ "Login" if current_lang == "en" else "Anmelden" }}</a>
       </div>
     </header>
     
     <main class="page">
       <section class="hero">
-        <p class="section-title">Get in Touch</p>
-        <h1>Contact Our Team</h1>
-        <p>Have questions about ScanCrypt? We're here to help. Reach out to our team and we'll get back to you as soon as possible.</p>
+        <p class="section-title">{{ "Get in Touch" if current_lang == "en" else "Kontakt aufnehmen" }}</p>
+        <h1>{{ "Contact Our Team" if current_lang == "en" else "Kontaktieren Sie unser Team" }}</h1>
+        <p>{{ "Have questions about ScanCrypt? We're here to help. Reach out to our team and we'll get back to you as soon as possible." if current_lang == "en" else "Haben Sie Fragen zu ScanCrypt? Wir helfen gerne. Kontaktieren Sie unser Team und wir melden uns so schnell wie möglich." }}</p>
       </section>
 
       <section class="contact-grid">
         <div class="contact-info">
           <div class="contact-method">
-            <h3>What is ScanCrypt?</h3>
-            <p>ScanCrypt is a post-quantum cryptography security scanner that detects and analyzes ML-DSA and ML-KEM implementations in your codebase, identifying implementation vulnerabilities and security issues.</p>
+            <h3>{{ "What is ScanCrypt?" if current_lang == "en" else "Was ist ScanCrypt?" }}</h3>
+            <p>{{ "ScanCrypt is a post-quantum cryptography security scanner that detects and analyzes ML-DSA and ML-KEM implementations in your codebase, identifying implementation vulnerabilities and security issues." if current_lang == "en" else "ScanCrypt ist ein Sicherheits-Scanner für Post-Quanten-Kryptographie, der ML-DSA- und ML-KEM-Implementierungen in Ihrem Code erkennt und analysiert, um Implementierungsschwachstellen und Sicherheitsprobleme aufzudecken." }}</p>
           </div>
           
           <div class="contact-method">
-            <h3>Which programming languages are supported?</h3>
-            <p>ScanCrypt currently supports C and C++ source files. We scan local projects and analyze portable implementations, optimized variants (AVX2), and embedded/ARM Cortex-M deployments.</p>
+            <h3>{{ "Which programming languages are supported?" if current_lang == "en" else "Welche Programmiersprachen werden unterstützt?" }}</h3>
+            <p>{{ "ScanCrypt currently supports C and C++ source files. We scan local projects and analyze portable implementations, optimized variants (AVX2), and embedded/ARM Cortex-M deployments." if current_lang == "en" else "ScanCrypt unterstützt derzeit C- und C++-Quelldateien. Wir scannen lokale Projekte und analysieren portable Implementierungen, optimierte Varianten (AVX2) sowie Embedded-/ARM-Cortex-M-Deployments." }}</p>
           </div>
           
           <div class="contact-method">
-            <h3>How do I get started?</h3>
-            <p>You can start with our free Community plan by uploading a C/C++ project folder. You'll get immediate analysis of algorithm detection, security levels, and implementation types with an HTML report.</p>
+            <h3>{{ "How do I get started?" if current_lang == "en" else "Wie kann ich starten?" }}</h3>
+            <p>{{ "You can start with our free Community plan by uploading a C/C++ project folder. You'll get immediate analysis of algorithm detection, security levels, and implementation types with an HTML report." if current_lang == "en" else "Sie können mit unserem kostenlosen Community-Plan starten, indem Sie einen C/C++-Projektordner hochladen. Sie erhalten sofort eine Analyse zu Algorithmuserkennung, Sicherheitsstufen und Implementierungstypen inklusive HTML-Bericht." }}</p>
           </div>
           
           <div class="contact-method">
-            <h3>What's included in the Professional plan?</h3>
-            <p>Professional includes unlimited scans, complete ML-DSA and ML-KEM rule packs, vulnerability detection, severity classification, PDF/JSON/SARIF export, and email support at €79/month.</p>
+            <h3>{{ "What's included in the Professional plan?" if current_lang == "en" else "Was ist im Professional-Plan enthalten?" }}</h3>
+            <p>{{ "Professional includes unlimited scans, complete ML-DSA and ML-KEM rule packs, vulnerability detection, severity classification, PDF/JSON/SARIF export, and email support at €79/month." if current_lang == "en" else "Professional umfasst unbegrenzte Scans, vollständige ML-DSA- und ML-KEM-Regelpacks, Schwachstellenerkennung, Schweregradklassifizierung, PDF/JSON/SARIF-Export und E-Mail-Support für 79 €/Monat." }}</p>
           </div>
           
           <div class="contact-method">
-            <h3>Do you offer on-premise deployment?</h3>
-            <p>Yes, on-premise deployment is available with our Enterprise plan. Enterprise also includes side-channel analysis, fault-injection detection, custom rules, API access, and priority support.</p>
+            <h3>{{ "Do you offer on-premise deployment?" if current_lang == "en" else "Bieten Sie On-Premise-Deployment an?" }}</h3>
+            <p>{{ "Yes, on-premise deployment is available with our Enterprise plan. Enterprise also includes side-channel analysis, fault-injection detection, custom rules, API access, and priority support." if current_lang == "en" else "Ja, On-Premise-Deployment ist im Enterprise-Plan verfügbar. Enterprise beinhaltet zudem Seitenkanal-Analyse, Fault-Injection-Erkennung, benutzerdefinierte Regeln, API-Zugriff und Priority-Support." }}</p>
           </div>
           
           <div class="contact-method">
-            <h3>Can I test ScanCrypt for free?</h3>
-            <p>Absolutely! Our Community tier is free forever and includes core analysis features, HTML reports, and up to 3 scans per day. No credit card required.</p>
+            <h3>{{ "Can I test ScanCrypt for free?" if current_lang == "en" else "Kann ich ScanCrypt kostenlos testen?" }}</h3>
+            <p>{{ "Absolutely! Our Community tier is free forever and includes core analysis features, HTML reports, and up to 3 scans per day. No credit card required." if current_lang == "en" else "Ja! Unser Community-Tarif ist dauerhaft kostenlos und enthält Kernanalysefunktionen, HTML-Berichte und bis zu 3 Scans pro Tag. Keine Kreditkarte erforderlich." }}</p>
           </div>
         </div>
         
         <div class="form-section">
           <form method="post" action="/contact" style="display:flex;flex-direction:column;gap:20px;">
             <div class="form-group">
-              <label for="name">Full Name</label>
+              <label for="name">{{ "Full Name" if current_lang == "en" else "Vollständiger Name" }}</label>
               <input type="text" id="name" name="name" required />
             </div>
             
             <div class="form-group">
-              <label for="email">Email Address</label>
+              <label for="email">{{ "Email Address" if current_lang == "en" else "E-Mail-Adresse" }}</label>
               <input type="email" id="email" name="email" required />
             </div>
             
             <div class="form-group">
-              <label for="subject">Subject</label>
+              <label for="subject">{{ "Subject" if current_lang == "en" else "Betreff" }}</label>
               <input type="text" id="subject" name="subject" required />
             </div>
             
             <div class="form-group">
-              <label for="message">Message</label>
+              <label for="message">{{ "Message" if current_lang == "en" else "Nachricht" }}</label>
               <textarea id="message" name="message" required></textarea>
             </div>
             
-            <button type="submit" class="button primary">Send Message</button>
+            <button type="submit" class="button primary">{{ "Send Message" if current_lang == "en" else "Nachricht senden" }}</button>
           </form>
         </div>
       </section>

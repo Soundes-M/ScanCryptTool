@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ current_lang }}">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,6 +14,13 @@
       * { box-sizing: border-box; }
       body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
       .app-shell { width: 100%; max-width: 980px; }
+      .nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+      .nav-links { display:flex; gap:16px; align-items:center; }
+      .nav-links a { color:#d1d5db; text-decoration:none; font-weight:600; font-size:0.95rem; }
+      .nav-actions { display:flex; align-items:center; gap:10px; }
+      .lang { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; color:#d1d5db; background:rgba(255,255,255,0.08); border-radius:999px; text-decoration:none; border:1px solid rgba(209,213,219,0.16); font-size:0.85rem; }
+      .lang svg { width:16px; height:16px; }
+      .login-button { display:inline-flex; align-items:center; justify-content:center; padding:8px 14px; color:#e5e7eb; background:#4338ca; border-radius:999px; text-decoration:none; font-weight:700; border:1px solid rgba(255,255,255,0.12); font-size:0.88rem; }
       .hero { padding: 32px 36px; border-radius: 28px 28px 20px 20px; background: linear-gradient(180deg, #4f46e5 0%, #6366f1 100%); color: white; box-shadow: 0 30px 80px rgba(15, 23, 42, 0.18); }
       .hero h1 { margin: 0 0 12px; font-size: clamp(2rem, 2.4vw, 2.8rem); letter-spacing: -0.04em; }
       .hero p { max-width: 760px; margin: 0; line-height: 1.7; opacity: 0.92; }
@@ -61,6 +68,26 @@
   </head>
   <body>
     <div class="app-shell">
+      <header class="nav">
+        <div class="nav-links">
+          <a href="/">{{ t.nav_news }}</a>
+          <a href="/services">{{ t.nav_services }}</a>
+          <a href="/about">{{ t.nav_about }}</a>
+          <a href="/pricing">{{ t.nav_pricing }}</a>
+          <a href="/contact">{{ t.nav_contact }}</a>
+        </div>
+        <div class="nav-actions">
+          <a class="lang" href="?lang={{ other_lang }}" title="{{ other_lang_title }}">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="#d1d5db" stroke-width="1.5" />
+              <path d="M4 12H20M12 4C16 4 18 6.5 18 12C18 17.5 16 20 12 20C8 20 6 17.5 6 12C6 6.5 8 4 12 4Z" stroke="#d1d5db" stroke-width="1.5"/>
+            </svg>
+            {{ other_lang_label }}
+          </a>
+          <a class="login-button" href="/login">{{ "Login" if current_lang == "en" else "Anmelden" }}</a>
+        </div>
+      </header>
+
       <section class="hero">
         <h1>{{ t.tool_title }}</h1>
         <p>{{ t.tool_description }}</p>
@@ -100,68 +127,68 @@
               </div>
 
               <div class="project-summary">
-                <div class="summary-header">Project Summary</div>
+                <div class="summary-header">{{ "Project Summary" if current_lang == "en" else "Projektübersicht" }}</div>
                 <div class="summary-divider">──────────────────────────────</div>
                 
                 <div class="summary-grid">
                   <div class="summary-item">
-                    <div class="summary-label">Project Name</div>
+                    <div class="summary-label">{{ "Project Name" if current_lang == "en" else "Projektname" }}</div>
                     <div class="summary-value">{{ result.folder_name }}</div>
                   </div>
                   <div class="summary-item">
-                    <div class="summary-label">Algorithm</div>
+                    <div class="summary-label">{{ "Algorithm" if current_lang == "en" else "Algorithmus" }}</div>
                     <div class="summary-value">{{ result.overall_algorithm }}</div>
                   </div>
                   <div class="summary-item">
-                    <div class="summary-label">Security Level</div>
+                    <div class="summary-label">{{ "Security Level" if current_lang == "en" else "Sicherheitsstufe" }}</div>
                     <div class="summary-value">{{ result.overall_security_level }}</div>
                     {% for item in result.missing_information %}
                       {% if 'KYBER_K' in item or 'variant' in item.lower() %}
-                        <div style="margin-top:6px; color:#9ca3af; font-size:0.92rem;">Reason: {{ item }}</div>
+                        <div style="margin-top:6px; color:#9ca3af; font-size:0.92rem;">{{ "Reason" if current_lang == "en" else "Grund" }}: {{ item }}</div>
                       {% endif %}
                     {% endfor %}
                   </div>
                   <div class="summary-item">
-                    <div class="summary-label">Implementation Type</div>
+                    <div class="summary-label">{{ "Implementation Type" if current_lang == "en" else "Implementierungstyp" }}</div>
                     <div class="summary-value">{{ result.overall_implementation_type }}</div>
                   </div>
                   <div class="summary-item">
-                    <div class="summary-label">Programming Language</div>
+                    <div class="summary-label">{{ "Programming Language" if current_lang == "en" else "Programmiersprache" }}</div>
                     <div class="summary-value">C/C++</div>
                   </div>
                   <div class="summary-item">
-                    <div class="summary-label">Files</div>
+                    <div class="summary-label">{{ "Files" if current_lang == "en" else "Dateien" }}</div>
                     <div class="summary-value">{{ result.total_files }}</div>
                   </div>
                   <div class="summary-item">
-                    <div class="summary-label">C/C++ Source Files</div>
+                    <div class="summary-label">{{ "C/C++ Source Files" if current_lang == "en" else "C/C++-Quelldateien" }}</div>
                     <div class="summary-value">{{ result.c_files }}</div>
                   </div>
                   <div class="summary-item">
-                    <div class="summary-label">Header Files</div>
+                    <div class="summary-label">{{ "Header Files" if current_lang == "en" else "Header-Dateien" }}</div>
                     <div class="summary-value">{{ result.h_files }}</div>
                   </div>
                   <div class="summary-item">
-                    <div class="summary-label">Lines of Code</div>
+                    <div class="summary-label">{{ "Lines of Code" if current_lang == "en" else "Codezeilen" }}</div>
                     <div class="summary-value">{{ result.total_loc }}</div>
                   </div>
                   <div class="summary-item">
-                    <div class="summary-label">Build System</div>
+                    <div class="summary-label">{{ "Build System" if current_lang == "en" else "Build-System" }}</div>
                     <div class="summary-value">{{ result.build_system }}</div>
                   </div>
                   <div class="summary-item">
-                    <div class="summary-label">Analysis Confidence</div>
+                    <div class="summary-label">{{ "Analysis Confidence" if current_lang == "en" else "Analysevertrauen" }}</div>
                     <div class="summary-value">{{ result.confidence }}</div>
                   </div>
                 </div>
 
                 {% if result.algorithm_evidence or result.implementation_evidence or result.missing_information %}
                 <div class="evidence-section">
-                  <div class="evidence-header">Detection Evidence</div>
+                  <div class="evidence-header">{{ "Detection Evidence" if current_lang == "en" else "Erkennungsnachweise" }}</div>
 
                   {% if result.algorithm_evidence %}
                   <div style="margin-bottom:10px;">
-                    <div class="evidence-header" style="font-size:0.92rem; color:#9ca3af; font-weight:700; margin-bottom:6px;">Algorithm Evidence</div>
+                    <div class="evidence-header" style="font-size:0.92rem; color:#9ca3af; font-weight:700; margin-bottom:6px;">{{ "Algorithm Evidence" if current_lang == "en" else "Algorithmus-Nachweise" }}</div>
                     <ul class="evidence-list">
                       {% for item in result.algorithm_evidence %}
                       <li>• {{ item }}</li>
@@ -172,7 +199,7 @@
 
                   {% if result.implementation_evidence %}
                   <div style="margin-top:12px;">
-                    <div class="evidence-header" style="font-size:0.92rem; color:#9ca3af; font-weight:700; margin-bottom:6px;">Implementation Evidence</div>
+                    <div class="evidence-header" style="font-size:0.92rem; color:#9ca3af; font-weight:700; margin-bottom:6px;">{{ "Implementation Evidence" if current_lang == "en" else "Implementierungs-Nachweise" }}</div>
                     <ul class="evidence-list">
                       {% for item in result.implementation_evidence %}
                       <li>• {{ item }}</li>
@@ -183,7 +210,7 @@
 
                   {% if result.missing_information %}
                   <div style="margin-top:12px;">
-                    <div class="evidence-header" style="font-size:0.92rem; color:#fca5a5; font-weight:700; margin-bottom:6px;">Missing Information</div>
+                    <div class="evidence-header" style="font-size:0.92rem; color:#fca5a5; font-weight:700; margin-bottom:6px;">{{ "Missing Information" if current_lang == "en" else "Fehlende Informationen" }}</div>
                     <ul class="evidence-list">
                       {% for item in result.missing_information %}
                       <li>• {{ item }}</li>
@@ -197,8 +224,8 @@
 
                 {% if result.report_url %}
                 <div class="evidence-section">
-                  <div class="evidence-header">Report</div>
-                  <a class="download-report" href="{{ result.report_url }}" download>⬇ Download Professional PDF Report</a>
+                  <div class="evidence-header">{{ "Report" if current_lang == "en" else "Bericht" }}</div>
+                  <a class="download-report" href="{{ result.report_url }}" download>⬇ {{ "Download Professional PDF Report" if current_lang == "en" else "Professionellen PDF-Bericht herunterladen" }}</a>
                 </div>
                 {% endif %}
             </section>

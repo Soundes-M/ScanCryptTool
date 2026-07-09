@@ -54,9 +54,9 @@
       <div class="nav-links">
         <a href="/">{{ t.nav_news }}</a>
         <a href="/services">{{ t.nav_services }}</a>
-        <a href="/">{{ t.nav_about }}</a>
+        <a href="/about">{{ t.nav_about }}</a>
         <a href="/pricing">{{ t.nav_pricing }}</a>
-        <a href="/">{{ t.nav_contact }}</a>
+        <a href="/contact">{{ t.nav_contact }}</a>
       </div>
       <div class="nav-actions">
         <a class="lang" href="?lang={{ other_lang }}" title="{{ other_lang_title }}">
@@ -67,90 +67,111 @@
           </svg>
           {{ other_lang_label }}
         </a>
-        <a class="login-button" href="/login">Login</a>
+        <a class="login-button" href="/login">{{ "Login" if current_lang == "en" else "Anmelden" }}</a>
       </div>
     </header>
     <main class="page">
       <section class="hero">
-        <p class="section-title">Pricing</p>
-        <h1>Choose the plan that fits your team</h1>
-        <p>From Developer to Pro, ScanCrypt protects your code, secrets, cloud and compliance with post-quantum aware scanning.</p>
+        <p class="section-title">{{ "Pricing" if current_lang == "en" else "Preise" }}</p>
+        <h1>{{ "Choose the plan that fits your team" if current_lang == "en" else "Wählen Sie den Plan, der zu Ihrem Team passt" }}</h1>
+        <p>{{ "From Developer to Pro, ScanCrypt protects your code, secrets, cloud and compliance with post-quantum aware scanning." if current_lang == "en" else "Von Developer bis Pro schützt ScanCrypt Ihren Code, Geheimnisse, Cloud und Compliance mit post-quantenfähiger Analyse." }}</p>
       </section>
 
       <section class="pricing-grid">
         <article class="card">
-          <p class="section-title">Community</p>
-          <p class="price">€0<span style="font-size:1rem;font-weight:500;">/ Free forever</span></p>
-          <p class="subtitle">Perfect for researchers, students, and open-source developers</p>
+          <p class="section-title">{{ "Community" if current_lang == "en" else "Community" }}</p>
+          <p class="price">€0<span style="font-size:1rem;font-weight:500;">{{ "/ Free forever" if current_lang == "en" else "/ Für immer kostenlos" }}</span></p>
+          <p class="subtitle">{{ "Perfect for researchers, students, and open-source developers" if current_lang == "en" else "Perfekt für Forschende, Studierende und Open-Source-Entwickler" }}</p>
           <div>
-            <p class="section-title">Features</p>
+            <p class="section-title">{{ "Features" if current_lang == "en" else "Funktionen" }}</p>
             <ul class="features">
+              {% if current_lang == "en" %}
               <li>Algorithm detection (ML-DSA / ML-KEM)</li>
               <li>Security level detection</li>
               <li>Implementation type detection</li>
               <li>Scan local C/C++ projects</li>
               <li>Basic implementation checks</li>
               <li>HTML security report</li>
+              {% else %}
+              <li>Algorithmuserkennung (ML-DSA / ML-KEM)</li>
+              <li>Erkennung der Sicherheitsstufe</li>
+              <li>Erkennung des Implementierungstyps</li>
+              <li>Scan lokaler C/C++-Projekte</li>
+              <li>Grundlegende Implementierungsprüfungen</li>
+              <li>HTML-Sicherheitsbericht</li>
+              {% endif %}
             </ul>
           </div>
           <div>
-            <p class="section-title">Includes</p>
+            <p class="section-title">{{ "Includes" if current_lang == "en" else "Enthält" }}</p>
             <ul class="features">
-              <li>3 scans/day</li>
-              <li>1 project</li>
-              <li>Community support</li>
+              <li>{{ "3 scans/day" if current_lang == "en" else "3 Scans/Tag" }}</li>
+              <li>{{ "1 project" if current_lang == "en" else "1 Projekt" }}</li>
+              <li>{{ "Community support" if current_lang == "en" else "Community-Support" }}</li>
             </ul>
           </div>
           <div class="button-row">
-            <a class="button primary" href="/scan">Start Free</a>
+            <a class="button primary" href="/scan">{{ "Start Free" if current_lang == "en" else "Kostenlos starten" }}</a>
           </div>
         </article>
 
         <article class="card popular">
-          <p class="section-title">Professional</p>
-          <p class="price">€79<span style="font-size:1rem;font-weight:500;">/ month</span></p>
-          <p class="subtitle">For engineers developing post-quantum cryptographic software</p>
+          <p class="section-title">{{ "Professional" if current_lang == "en" else "Professional" }}</p>
+          <p class="price">€79<span style="font-size:1rem;font-weight:500;">{{ "/ month" if current_lang == "en" else "/ Monat" }}</span></p>
+          <p class="subtitle">{{ "For engineers developing post-quantum cryptographic software" if current_lang == "en" else "Für Engineers, die post-quantenkryptographische Software entwickeln" }}</p>
           <div>
-            <p class="section-title">Everything in Community, plus:</p>
+            <p class="section-title">{{ "Everything in Community, plus:" if current_lang == "en" else "Alles aus Community, plus:" }}</p>
             <p style="margin-top:10px;">
-              <strong style="color:#a5b4fc;">Features</strong>
+              <strong style="color:#a5b4fc;">{{ "Features" if current_lang == "en" else "Funktionen" }}</strong>
             </p>
             <ul class="features">
+              {% if current_lang == "en" %}
               <li>Complete ML-DSA rule pack</li>
               <li>Complete ML-KEM rule pack</li>
               <li>Detection of implementation vulnerabilities</li>
               <li>Security severity classification</li>
-              <li>Vulnerability explanations</li> 
+              <li>Vulnerability explanations</li>
               <li>PDF reports</li>
               <li>JSON reports</li>
               <li>SARIF export</li>
-              <li>Email support</li>
+              {% else %}
+              <li>Vollständiges ML-DSA-Regelpaket</li>
+              <li>Vollständiges ML-KEM-Regelpaket</li>
+              <li>Erkennung von Implementierungsschwachstellen</li>
+              <li>Klassifizierung nach Schweregrad</li>
+              <li>Erklärungen zu Schwachstellen</li>
+              <li>PDF-Berichte</li>
+              <li>JSON-Berichte</li>
+              <li>SARIF-Export</li>
+              {% endif %}
+              <li>{{ "Email support" if current_lang == "en" else "E-Mail-Support" }}</li>
             </ul>
           </div>
           <div>
-            <p class="section-title">Includes</p>
+            <p class="section-title">{{ "Includes" if current_lang == "en" else "Enthält" }}</p>
             <ul class="features">
-              <li>Unlimited scans</li>
-              <li>Unlimited projects</li>
-              <li>Rule updates</li>
+              <li>{{ "Unlimited scans" if current_lang == "en" else "Unbegrenzte Scans" }}</li>
+              <li>{{ "Unlimited projects" if current_lang == "en" else "Unbegrenzte Projekte" }}</li>
+              <li>{{ "Rule updates" if current_lang == "en" else "Regel-Updates" }}</li>
             </ul>
           </div>
           <div class="button-row">
-            <a class="button primary" href="https://example.com/buy?plan=professional">Start Free</a>
+            <a class="button primary" href="https://example.com/buy?plan=professional">{{ "Start Free" if current_lang == "en" else "Kostenlos starten" }}</a>
           </div>
-          <p class="disclaimer">Most popular</p>
+          <p class="disclaimer">{{ "Most popular" if current_lang == "en" else "Am beliebtesten" }}</p>
         </article>
 
         <article class="card">
-          <p class="section-title">Enterprise</p>
-          <p class="price">€399<span style="font-size:1rem;font-weight:500;">/ month</span></p>
-          <p class="subtitle">For organizations requiring advanced post-quantum security assurance</p>
+          <p class="section-title">{{ "Enterprise" if current_lang == "en" else "Enterprise" }}</p>
+          <p class="price">€399<span style="font-size:1rem;font-weight:500;">{{ "/ month" if current_lang == "en" else "/ Monat" }}</span></p>
+          <p class="subtitle">{{ "For organizations requiring advanced post-quantum security assurance" if current_lang == "en" else "Für Organisationen mit erweiterten Anforderungen an Post-Quanten-Sicherheit" }}</p>
           <div>
-            <p class="section-title">Everything in Professional, plus:</p>
+            <p class="section-title">{{ "Everything in Professional, plus:" if current_lang == "en" else "Alles aus Professional, plus:" }}</p>
             <p style="margin-top:10px;">
-              <strong style="color:#a5b4fc;">Features</strong>
+              <strong style="color:#a5b4fc;">{{ "Features" if current_lang == "en" else "Funktionen" }}</strong>
             </p>
             <ul class="features">
+              {% if current_lang == "en" %}
               <li>Side-channel analysis</li>
               <li>Fault-injection vulnerability analysis</li>
               <li>Constant-time verification</li>
@@ -162,19 +183,32 @@
               <li>Team management</li>
               <li>On-premise deployment</li>
               <li>Priority support</li>
+              {% else %}
+              <li>Seitenkanal-Analyse</li>
+              <li>Fault-Injection-Schwachstellenanalyse</li>
+              <li>Constant-Time-Verifikation</li>
+              <li>Erweiterte kryptographische Regelpakete</li>
+              <li>KI-gestützte Schwachstellenerklärungen</li>
+              <li>Empfohlene Gegenmaßnahmen und sichere Implementierungsleitlinien</li>
+              <li>Benutzerdefinierte Sicherheitsregeln</li>
+              <li>API-Zugriff</li>
+              <li>Teamverwaltung</li>
+              <li>On-Premise-Deployment</li>
+              <li>Priority-Support</li>
+              {% endif %}
             </ul>
           </div>
           <div>
-            <p class="section-title">Includes</p>
+            <p class="section-title">{{ "Includes" if current_lang == "en" else "Enthält" }}</p>
             <ul class="features">
-              <li>Unlimited scans</li>
-              <li>Unlimited projects</li>
-              <li>Dedicated rule updates</li>
-              <li>Early access to new algorithm support</li>
+              <li>{{ "Unlimited scans" if current_lang == "en" else "Unbegrenzte Scans" }}</li>
+              <li>{{ "Unlimited projects" if current_lang == "en" else "Unbegrenzte Projekte" }}</li>
+              <li>{{ "Dedicated rule updates" if current_lang == "en" else "Dedizierte Regel-Updates" }}</li>
+              <li>{{ "Early access to new algorithm support" if current_lang == "en" else "Früher Zugriff auf neue Algorithmus-Unterstützung" }}</li>
             </ul>
           </div>
           <div class="button-row">
-            <a class="button secondary" href="mailto:sales@scancrypt.example">Contact Sales</a>
+            <a class="button secondary" href="mailto:sales@scancrypt.example">{{ "Contact Sales" if current_lang == "en" else "Vertrieb kontaktieren" }}</a>
           </div>
         </article>
       </section>
