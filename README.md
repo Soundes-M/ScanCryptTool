@@ -178,6 +178,62 @@ http://127.0.0.1:5000
 
 ---
 
+## Professional PDF Report Generation
+
+ScanCrypt includes a ReportLab-based PDF generator for enterprise-style security reports.
+
+File:
+- `report_generator.py`
+
+Main API:
+- `generate_scan_report(results: dict, filename: str)`
+
+### Example
+
+```python
+from report_generator import generate_scan_report
+
+results = {
+  "project_name": "m4fstack",
+  "algorithm": "ML-KEM / Kyber",
+  "security_level": "ML-KEM-768 / Kyber768",
+  "implementation_type": "Masked Implementation",
+  "language": "C/C++",
+  "build_system": "Not detected",
+  "files": 3,
+  "source_files": 2,
+  "header_files": 1,
+  "lines_of_code": 906,
+  "overall_risk": "High",
+  "analysis_confidence": "99%",
+  "detection_confidence": "97%",
+  "rules_executed": 15,
+  "rules_passed": 9,
+  "rules_failed": 6,
+  "analysis_duration": "00:01:25",
+  "detection_evidence": [
+    "KYBER_K = 3",
+    "poly_compress() detected",
+    "ntt() detected"
+  ],
+  "findings": []
+}
+
+generate_scan_report(results, "scancrypt_report.pdf")
+```
+
+The report includes:
+- Cover Page
+- Executive Summary
+- Project Inspection
+- Findings Summary
+- Detailed Findings
+- Rule Execution Summary
+- Statistics (with progress bars)
+- Appendix
+
+---
+
 ## Roadmap
 
 The current version focuses on automatic project inspection.

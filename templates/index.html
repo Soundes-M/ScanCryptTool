@@ -50,6 +50,8 @@
       .evidence-header { font-size: 0.95rem; font-weight: 700; color: #a5b4fc; margin-bottom: 12px; }
       .evidence-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
       .evidence-list li { color: #d1d5db; font-size: 0.9rem; }
+      .download-report { display: inline-block; margin-top: 14px; text-decoration: none; color: #fff; background: #0f766e; border: 1px solid #14b8a6; border-radius: 12px; padding: 10px 14px; font-weight: 700; font-size: 0.92rem; }
+      .download-report:hover { background: #115e59; }
       table { width: 100%; border-collapse: collapse; margin-top: 18px; }
       th, td { text-align: left; padding: 14px 12px; border-bottom: 1px solid #e5e7eb; }
       th { font-size: 0.95rem; font-weight: 700; color: #374151; }
@@ -190,6 +192,13 @@
                   </div>
                   {% endif %}
 
+                </div>
+                {% endif %}
+
+                {% if result.report_url %}
+                <div class="evidence-section">
+                  <div class="evidence-header">Report</div>
+                  <a class="download-report" href="{{ result.report_url }}" download>⬇ Download Professional PDF Report</a>
                 </div>
                 {% endif %}
             </section>

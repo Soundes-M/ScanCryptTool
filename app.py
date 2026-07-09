@@ -2,7 +2,9 @@ from pathlib import Path
 import re
 import os
 import tempfile
+from datetime import datetime
 from scan_detector import analyze_project
+from report_generator import generate_scan_report
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 
@@ -12,6 +14,8 @@ app.secret_key = "replace-with-a-secure-random-key"
 # Logo upload settings
 UPLOAD_FOLDER = Path(__file__).parent / "static" / "uploads"
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+REPORTS_FOLDER = Path(__file__).parent / "static" / "reports"
+REPORTS_FOLDER.mkdir(parents=True, exist_ok=True)
 ALLOWED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp"}
 
 
@@ -514,6 +518,59 @@ def index():
             return redirect(url_for("index"))
 
         folder_name = Path(valid_files[0].filename).parts[0] if "/" in valid_files[0].filename or "\\" in valid_files[0].filename else valid_files[0].filename
+        analyzed_files = [f.filename for f in valid_files if f and f.filename]
+
+        # Build PDF report payload and generate downloadable report
+        report_url = None
+        try:
+            safe_project = secure_filename(folder_name) or "project"
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            report_filename = f"scancrypt_report_{safe_project}_{timestamp}.pdf"
+            report_path = REPORTS_FOLDER / report_filename
+
+            report_payload = {
+                "project_name": folder_name,
+                "analysis_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "tool_version": "1.0",
+                "algorithm": project_result.get("algorithm", "Unknown"),
+                "security_level": project_result.get("security_level", "Unknown"),
+                "implementation_type": project_result.get("implementation_type", "Unknown"),
+                "overall_risk": "Information" if project_result.get("algorithm", "Unknown") == "Unknown" else "Medium",
+                "language": project_result.get("programming_language", "C/C++"),
+                "build_system": project_result.get("build_system", "Unknown"),
+                "files": project_result.get("files", 0),
+                "source_files": project_result.get("c_source_files", 0),
+                "header_files": project_result.get("header_files", 0),
+                "lines_of_code": project_result.get("lines_of_code", 0),
+                "analysis_confidence": project_result.get("analysis_confidence", "0%"),
+                "detection_confidence": project_result.get("analysis_confidence", "0%"),
+                "rules_executed": 0,
+                "rules_passed": 0,
+                "rules_failed": 0,
+                "analysis_duration": "N/A",
+                "detection_evidence": (
+                    (project_result.get("algorithm_evidence", []) or [])
+                    + (project_result.get("implementation_evidence", []) or [])
+                    + (project_result.get("missing_information", []) or [])
+                ),
+                "findings": [],
+                "analysed_files": analyzed_files,
+                "scan_configuration": "Default ScanCrypt profile",
+                "supported_algorithms": ["ML-DSA (Dilithium)", "ML-KEM (Kyber)"],
+                "supported_implementation_types": [
+                    "Portable C / Reference",
+                    "AVX2 Optimized",
+                    "ARM Cortex-M / Embedded",
+                    "Masked Implementation",
+                    "Hardware / FPGA",
+                ],
+            }
+
+            generate_scan_report(report_payload, str(report_path))
+            report_url = url_for("static", filename=f"reports/{report_filename}")
+        except Exception as e:
+            flash(f"Report generation failed: {e}", "warning")
+
         result = {
             "folder_name": folder_name,
             "overall_algorithm": project_result.get("algorithm", "Unknown"),
@@ -528,6 +585,7 @@ def index():
             "algorithm_evidence": project_result.get("algorithm_evidence", [])[:50],
             "implementation_evidence": project_result.get("implementation_evidence", [])[:50],
             "missing_information": project_result.get("missing_information", []),
+            "report_url": report_url,
         }
 
     # pass logo URL if uploaded
