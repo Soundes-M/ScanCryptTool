@@ -17,17 +17,115 @@
       .lang svg { width:18px; height:18px; }
       .login-button { display:inline-flex; align-items:center; justify-content:center; padding:8px 16px; color:#e5e7eb; background:#4338ca; border-radius:999px; text-decoration:none; font-weight:700; border:1px solid rgba(255,255,255,0.12); }
 
-      .page { max-width:1100px; margin:0 auto; padding:60px 24px 80px; }
-      .hero { text-align:center; margin-bottom:44px; }
+      .page { max-width:none; margin:0 auto; padding:60px 340px 80px; }
+      .hero { text-align:center; margin-bottom:44px; max-width:860px; margin-left:auto; margin-right:auto; }
       .hero h1 { margin:0; font-size:clamp(2.3rem,4vw,3.8rem); line-height:1.08; }
       .hero p { max-width:860px; margin:16px auto 0; color:#d1d5db; font-size:1.05rem; line-height:1.7; }
 
-      .section { border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); border-radius:20px; padding:28px; margin-top:18px; }
+      .section { border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03); border-radius:20px; padding:28px; margin-top:18px; width:100%; }
       .section h2 { margin:0 0 10px; color:#a5b4fc; font-size:1.35rem; }
       .section p { margin:0; color:#d1d5db; line-height:1.75; }
       .section ul { margin:12px 0 0 18px; padding:0; display:grid; gap:8px; }
       .section li { color:#d1d5db; line-height:1.6; }
       .section-title { font-size:1rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:#a5b4fc; margin:0 0 12px; }
+      .papers-list { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+      .papers-list li { border:1px solid rgba(255,255,255,0.08); background:rgba(2,6,23,0.45); border-radius:12px; padding:10px 12px; }
+      .papers-list a { color:#c7d2fe; text-decoration:none; font-weight:600; }
+      .papers-list a:hover { text-decoration:underline; }
+      .paper-meta { display:block; margin-top:4px; color:#9ca3af; font-size:.9rem; }
+      .papers-band {
+        position:fixed;
+        right:18px;
+        top:110px;
+        width:300px;
+        height:calc(100vh - 130px);
+        border:1px solid rgba(255,255,255,0.12);
+        background:rgba(7, 10, 24, 0.82);
+        border-radius:16px;
+        display:flex;
+        flex-direction:column;
+        overflow:hidden;
+        backdrop-filter: blur(4px);
+      }
+      .keywords-band {
+        position:fixed;
+        left:18px;
+        top:110px;
+        width:300px;
+        height:calc(100vh - 130px);
+        border:1px solid rgba(255,255,255,0.12);
+        background:rgba(7, 10, 24, 0.82);
+        border-radius:16px;
+        display:flex;
+        flex-direction:column;
+        overflow:hidden;
+        backdrop-filter: blur(4px);
+      }
+      .keywords-band-head {
+        padding:12px 14px;
+        border-bottom:1px solid rgba(255,255,255,0.08);
+        color:#67e8f9;
+        font-weight:700;
+        font-size:.92rem;
+      }
+      .keywords-marquee { position:relative; overflow:hidden; height:100%; }
+      .keywords-track {
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        padding:12px;
+        display:flex;
+        flex-direction:column;
+        gap:0;
+        animation: keywords-scroll 28s linear infinite;
+        will-change: transform;
+      }
+      @keyframes keywords-scroll {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-50%); }
+      }
+      .keywords-list { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+      .keywords-list li {
+        border:1px solid rgba(103,232,249,0.25);
+        background:linear-gradient(180deg, rgba(14,116,144,0.18), rgba(8,47,73,0.2));
+        border-radius:999px;
+        padding:9px 12px;
+        color:#cffafe;
+        font-weight:600;
+        font-size:.92rem;
+      }
+      .papers-band-head {
+        padding:12px 14px;
+        border-bottom:1px solid rgba(255,255,255,0.08);
+        color:#a5b4fc;
+        font-weight:700;
+        font-size:.92rem;
+      }
+      .papers-marquee { position:relative; overflow:hidden; height:100%; }
+      .papers-track {
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        padding:12px;
+        display:grid;
+        gap:10px;
+        animation: papers-scroll 44s linear infinite;
+      }
+      @keyframes papers-scroll {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-52%); }
+      }
+      @media (max-width: 920px) {
+        .page { padding:60px 24px 80px; }
+        .keywords-band { position:static; width:auto; height:auto; margin:10px 24px 24px; }
+        .keywords-marquee { height:auto; }
+        .keywords-track { position:static; animation:none; padding:12px; }
+        .papers-band { position:static; width:auto; height:auto; margin:10px 24px 24px; }
+        .papers-marquee { height:auto; }
+        .papers-track { position:static; animation:none; padding:12px; }
+      }
     </style>
   </head>
   <body>
@@ -109,6 +207,120 @@
           {{ "As post-quantum cryptography becomes the new standard, secure implementations will become increasingly important. ScanCrypt aims to become a trusted platform for assessing the security of post-quantum cryptographic software throughout its development lifecycle." if current_lang == "en" else "Da sich Post-Quanten-Kryptographie als neuer Standard etabliert, werden sichere Implementierungen immer wichtiger. ScanCrypt möchte eine vertrauenswürdige Plattform für die Sicherheitsbewertung post-quantenkryptographischer Software über den gesamten Entwicklungszyklus hinweg werden." }}
         </p>
       </section>
+
     </main>
+
+    <aside class="keywords-band" aria-label="ScanCrypt capabilities">
+      <div class="keywords-band-head">{{ "Platform Focus" if current_lang == "en" else "Plattform-Fokus" }}</div>
+      <div class="keywords-marquee">
+        <div class="keywords-track">
+          <ul class="keywords-list">
+            <li>ML-DSA (Dilithium)</li>
+            <li>ML-KEM (Kyber)</li>
+            <li>Static Analysis</li>
+            <li>Implementation Security</li>
+            <li>Cryptographic Engineering</li>
+            <li>Rule-Based Detection</li>
+            <li>Assembly Hardening</li>
+            <li>Side-Channel Aware</li>
+            <li>Fault Injection Aware</li>
+            <li>Developer-Focused</li>
+            <li>Research-Driven</li>
+          </ul>
+          <ul class="keywords-list" aria-hidden="true">
+            <li>ML-DSA (Dilithium)</li>
+            <li>ML-KEM (Kyber)</li>
+            <li>Static Analysis</li>
+            <li>Implementation Security</li>
+            <li>Cryptographic Engineering</li>
+            <li>Rule-Based Detection</li>
+            <li>Assembly Hardening</li>
+            <li>Side-Channel Aware</li>
+            <li>Fault Injection Aware</li>
+            <li>Developer-Focused</li>
+            <li>Research-Driven</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+
+    <aside class="papers-band" aria-label="PQC papers">
+      <div class="papers-band-head">{{ "PQC Research References" if current_lang == "en" else "PQC-Forschungsreferenzen" }}</div>
+      <div class="papers-marquee">
+        <div class="papers-track">
+          <ul class="papers-list">
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:4DMP91E08xMC" target="_blank" rel="noopener noreferrer">MAGNET: MAsked Gaussian Now Efficient and Table-less</a><span class="paper-meta">2026</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:M3ejUd6NZC8C" target="_blank" rel="noopener noreferrer">Solving Concealed ILWE and Its Application for Breaking Masked Dilithium</a><span class="paper-meta">2025</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:_kc_bZDykSQC" target="_blank" rel="noopener noreferrer">MAYo or MAY-not: Exploring implementation security of the post-quantum signature scheme MAYO against physical attacks</a><span class="paper-meta">2024</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:ULOm3_A8WrAC" target="_blank" rel="noopener noreferrer">Application and security of lattice-based cryptography in embedded systems</a><span class="paper-meta">2024</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:kNdYIx-mwKoC" target="_blank" rel="noopener noreferrer">Loop aborts strike back: Defeating fault countermeasures in lattice signatures with ILP</a><span class="paper-meta">2023</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:0EnyYjriUFMC" target="_blank" rel="noopener noreferrer">On the feasibility of single-trace attacks on the Gaussian sampler using a CDT</a><span class="paper-meta">2023</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:3fE2CSJIrl8C" target="_blank" rel="noopener noreferrer">HaMAYO: A Fault-Tolerant Reconfigurable Hardware Implementation of the MAYO Signature Scheme</a><span class="paper-meta">2023</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:qxL8FJ1GzNcC" target="_blank" rel="noopener noreferrer">Recovering Rainbow's Secret Key</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:roLk4NBRz8UC" target="_blank" rel="noopener noreferrer">Machine-learning side-channel attacks on the GALACTICS constant-time implementation of BLISS</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:MXK_kJrjxJIC" target="_blank" rel="noopener noreferrer">Recovering rainbow’s secret key with a first-order fault attack</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:5nxA0vEk-isC" target="_blank" rel="noopener noreferrer">A post-quantum secure subscription concealed identifier for 6g</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:UebtZRa9Y70C" target="_blank" rel="noopener noreferrer">Xmss-based chain of trust</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:WF5omc3nYNoC" target="_blank" rel="noopener noreferrer">Profiling side-channel attacks on dilithium: A small bit-fiddling leak breaks it all</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:eQOLeE2rZwMC" target="_blank" rel="noopener noreferrer">Universal Forgery Attack on Dilithium Leveraging Power Side Channels</a><span class="paper-meta">2021</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:YsMSGLbcyi4C" target="_blank" rel="noopener noreferrer">Machine-Learning Side-Channel Analysis on Lattice-based Signature Schemes</a><span class="paper-meta">2021</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:9yKSN-GCB0IC" target="_blank" rel="noopener noreferrer">Post-quantum cryptography in embedded systems</a><span class="paper-meta">2019</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:2osOgNQ5qMEC" target="_blank" rel="noopener noreferrer">Applied post-quantum cryptography for embedded systems</a><span class="paper-meta">2019</span></li>
+          </ul>
+          <ul class="papers-list" aria-hidden="true">
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:4DMP91E08xMC" target="_blank" rel="noopener noreferrer">MAGNET: MAsked Gaussian Now Efficient and Table-less</a><span class="paper-meta">2026</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:M3ejUd6NZC8C" target="_blank" rel="noopener noreferrer">Solving Concealed ILWE and Its Application for Breaking Masked Dilithium</a><span class="paper-meta">2025</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:_kc_bZDykSQC" target="_blank" rel="noopener noreferrer">MAYo or MAY-not: Exploring implementation security of the post-quantum signature scheme MAYO against physical attacks</a><span class="paper-meta">2024</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:ULOm3_A8WrAC" target="_blank" rel="noopener noreferrer">Application and security of lattice-based cryptography in embedded systems</a><span class="paper-meta">2024</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:kNdYIx-mwKoC" target="_blank" rel="noopener noreferrer">Loop aborts strike back: Defeating fault countermeasures in lattice signatures with ILP</a><span class="paper-meta">2023</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:0EnyYjriUFMC" target="_blank" rel="noopener noreferrer">On the feasibility of single-trace attacks on the Gaussian sampler using a CDT</a><span class="paper-meta">2023</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:3fE2CSJIrl8C" target="_blank" rel="noopener noreferrer">HaMAYO: A Fault-Tolerant Reconfigurable Hardware Implementation of the MAYO Signature Scheme</a><span class="paper-meta">2023</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:qxL8FJ1GzNcC" target="_blank" rel="noopener noreferrer">Recovering Rainbow's Secret Key</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:roLk4NBRz8UC" target="_blank" rel="noopener noreferrer">Machine-learning side-channel attacks on the GALACTICS constant-time implementation of BLISS</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:MXK_kJrjxJIC" target="_blank" rel="noopener noreferrer">Recovering rainbow’s secret key with a first-order fault attack</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:5nxA0vEk-isC" target="_blank" rel="noopener noreferrer">A post-quantum secure subscription concealed identifier for 6g</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:UebtZRa9Y70C" target="_blank" rel="noopener noreferrer">Xmss-based chain of trust</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:WF5omc3nYNoC" target="_blank" rel="noopener noreferrer">Profiling side-channel attacks on dilithium: A small bit-fiddling leak breaks it all</a><span class="paper-meta">2022</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:eQOLeE2rZwMC" target="_blank" rel="noopener noreferrer">Universal Forgery Attack on Dilithium Leveraging Power Side Channels</a><span class="paper-meta">2021</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:YsMSGLbcyi4C" target="_blank" rel="noopener noreferrer">Machine-Learning Side-Channel Analysis on Lattice-based Signature Schemes</a><span class="paper-meta">2021</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:9yKSN-GCB0IC" target="_blank" rel="noopener noreferrer">Post-quantum cryptography in embedded systems</a><span class="paper-meta">2019</span></li>
+            <li><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=9rjaZ8oAAAAJ&amp;sortby=pubdate&amp;citation_for_view=9rjaZ8oAAAAJ:2osOgNQ5qMEC" target="_blank" rel="noopener noreferrer">Applied post-quantum cryptography for embedded systems</a><span class="paper-meta">2019</span></li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+    <script>
+      (function () {
+        const directLinks = {
+          "MAGNET: MAsked Gaussian Now Efficient and Table-less": "https://eprint.iacr.org/",
+          "Solving Concealed ILWE and Its Application for Breaking Masked Dilithium": "https://doi.org/10.1007/978-981-95-5096-8_19",
+          "MAYo or MAY-not: Exploring implementation security of the post-quantum signature scheme MAYO against physical attacks": "https://doi.org/10.1109/fdtc64268.2024.00012",
+          "Application and security of lattice-based cryptography in embedded systems": "https://link.springer.com/book/10.1007/978-3-031-62205-2",
+          "Loop aborts strike back: Defeating fault countermeasures in lattice signatures with ILP": "https://doi.org/10.46586/tches.v2023.i4.367-392",
+          "On the feasibility of single-trace attacks on the Gaussian sampler using a CDT": "https://doi.org/10.1007/978-3-031-29497-6_8",
+          "HaMAYO: A Fault-Tolerant Reconfigurable Hardware Implementation of the MAYO Signature Scheme": "https://doi.org/10.1007/978-3-031-57543-3_13",
+          "Recovering Rainbow's Secret Key": "https://doi.org/10.1007/978-3-031-17433-9_15",
+          "Machine-learning side-channel attacks on the GALACTICS constant-time implementation of BLISS": "https://doi.org/10.1145/3538969.3538980",
+          "Recovering rainbow’s secret key with a first-order fault attack": "https://doi.org/10.1007/978-3-031-17433-9_15",
+          "A post-quantum secure subscription concealed identifier for 6g": "https://doi.org/10.1145/3507657.3528540",
+          "Xmss-based chain of trust": "https://doi.org/10.29007/2fv1",
+          "Profiling side-channel attacks on dilithium: A small bit-fiddling leak breaks it all": "https://doi.org/10.1007/978-3-031-58411-4_1",
+          "Universal Forgery Attack on Dilithium Leveraging Power Side Channels": "https://eprint.iacr.org/",
+          "Machine-Learning Side-Channel Analysis on Lattice-based Signature Schemes": "https://crypto-day-matters.de/",
+          "Post-quantum cryptography in embedded systems": "https://doi.org/10.1145/3339252.3341475",
+          "Applied post-quantum cryptography for embedded systems": "https://doi.org/10.18420/cdm-2019-30-06"
+        };
+
+        document.querySelectorAll('.papers-list a').forEach((a) => {
+          const title = a.textContent.trim();
+          const mapped = directLinks[title];
+          if (mapped) {
+            a.href = mapped;
+          } else {
+            a.href = `https://scholar.google.com/scholar?q=${encodeURIComponent(title)}`;
+          }
+        });
+      })();
+    </script>
   </body>
 </html>

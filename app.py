@@ -2,6 +2,9 @@ from pathlib import Path
 import re
 import os
 import tempfile
+import subprocess
+import shutil
+from uuid import uuid4
 from datetime import datetime
 from scan_detector import analyze_project
 from report_generator import generate_scan_report
@@ -16,7 +19,33 @@ UPLOAD_FOLDER = Path(__file__).parent / "static" / "uploads"
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 REPORTS_FOLDER = Path(__file__).parent / "static" / "reports"
 REPORTS_FOLDER.mkdir(parents=True, exist_ok=True)
+ASSEMBLY_OUTPUT_FOLDER = REPORTS_FOLDER / "assembly"
+ASSEMBLY_OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
 ALLOWED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp"}
+
+SUPPORTED_TARGETS = {
+    "cortex-m0": {"label": "ARM Cortex-M0", "mcpu": "cortex-m0"},
+    "cortex-m3": {"label": "ARM Cortex-M3", "mcpu": "cortex-m3"},
+    "cortex-m4": {"label": "ARM Cortex-M4", "mcpu": "cortex-m4"},
+}
+
+SUPPORTED_C_SUBSET = [
+    "Function-level C routines (single translation unit input)",
+    "Integer/pointer arithmetic and control flow in C/C++ source",
+    "Patterns aligned with embedded ARM Cortex-M oriented code generation",
+    "Code that can be represented in the executable's current IR/SSA workflow",
+]
+
+FLOW_STEPS = [
+    "C input",
+    "Input validation",
+    "Supported operation detection",
+    "Architecture selection",
+    "Generator execution",
+    "Generated code",
+    "Warnings and assumptions",
+    "Downloadable output",
+]
 
 
 def allowed_image(filename: str) -> bool:
@@ -58,6 +87,15 @@ TRANSLATIONS = {
         "overall_algorithm": "Algorithm",
         "overall_security_level": "Security level",
         "overall_implementation_type": "Implementation type",
+        "assembly_title": "ScanCrypt — Secure Assembly Generator",
+        "assembly_h1": "Secure Assembly Generation",
+        "assembly_lead": "This secure code generation flow accepts C/C++ routines, processes them through an SSA-style intermediate form, derives parameter and call security context, performs taint tracking across basic blocks, and emits hardened assembly output with protection-focused transformations. The current generation profile targets embedded ARM Cortex-M class platforms (ARMv6-M style output), making it suitable for constrained firmware environments.",
+        "assembly_input_title": "Input C source",
+        "assembly_input_help": "Paste C code below or upload a C/C++ file.",
+        "assembly_upload_label": "Upload C file",
+        "assembly_generate_button": "Generate secure assembly code",
+        "assembly_result_title": "Generated assembly output",
+        "assembly_result_placeholder": "Generated output will appear here after execution.",
     },
     "de": {
         "title": "ScanCrypt — Post-Quanten-Sicherheit",
@@ -86,6 +124,15 @@ TRANSLATIONS = {
         "overall_algorithm": "Algorithmus",
         "overall_security_level": "Sicherheitsstufe",
         "overall_implementation_type": "Implementierungstyp",
+        "assembly_title": "ScanCrypt — Sicherer Assembler-Generator",
+        "assembly_h1": "Sichere Assembler-Generierung",
+        "assembly_lead": "Dieser sichere Code-Generierungsablauf verarbeitet C/C++-Routinen über eine SSA-ähnliche Zwischenrepräsentation, leitet Sicherheitskontext für Parameter und Funktionsaufrufe ab, führt Taint-Tracking über Basic Blocks aus und erzeugt gehärtete Assembler-Ausgabe mit schutzorientierten Transformationen. Das aktuelle Generierungsprofil zielt auf eingebettete ARM-Cortex-M-Plattformen (ARMv6-M-ähnliche Ausgabe) und eignet sich damit für ressourcenbegrenzte Firmware-Umgebungen.",
+        "assembly_input_title": "C-Quelltext Eingabe",
+        "assembly_input_help": "Fügen Sie unten C-Code ein oder laden Sie eine C/C++-Datei hoch.",
+        "assembly_upload_label": "C-Datei hochladen",
+        "assembly_generate_button": "Sicheren Assembler-Code generieren",
+        "assembly_result_title": "Generierte Assembler-Ausgabe",
+        "assembly_result_placeholder": "Die generierte Ausgabe wird nach der Ausführung hier angezeigt.",
     },
 }
 
@@ -95,6 +142,98 @@ def get_lang_from_request():
     if lang:
         session["lang"] = lang
     return session.get("lang", "en")
+
+
+def detect_input_function_name(source: str) -> str | None:
+    function_def = re.search(
+        r"\b(?:static\s+|inline\s+|extern\s+|const\s+)*"
+        r"(?:void|int|unsigned|signed|long|short|char|uint\d+_t|int\d+_t|size_t|bool|float|double)"
+        r"(?:\s+|\s*\*+\s*)([A-Za-z_]\w*)\s*\([^;{}]*\)\s*\{",
+        source,
+        re.MULTILINE,
+    )
+    if function_def:
+        return function_def.group(1)
+    return None
+
+
+def detect_supported_operations(source: str) -> list[str]:
+    operation_patterns = {
+        "Reduction": r"\b(reduce|poly_reduce|montgomery_reduce|barrett_reduce)\b",
+        "Polynomial arithmetic": r"\b(poly|polynomial|ntt|invntt)\b",
+        "Modular arithmetic": r"\b(mod|montgomery|barrett)\b",
+        "Bitwise operations": r"\b(\^|\||&|<<|>>)\b",
+    }
+
+    matches = []
+    for name, pattern in operation_patterns.items():
+        if re.search(pattern, source, re.IGNORECASE):
+            matches.append(name)
+    return matches
+
+
+def basic_assembly_syntax_check(assembly_text: str) -> tuple[bool, list[str]]:
+    issues: list[str] = []
+    asm_lines = [line for line in assembly_text.splitlines() if line.strip()]
+
+    if not asm_lines:
+        return False, ["No assembly output lines detected."]
+
+    has_instruction_like = any(
+        re.match(r"^\s*(\.[A-Za-z_]+|[A-Za-z_][A-Za-z0-9_]*:|[a-z]{2,}\b)", line)
+        for line in asm_lines
+    )
+    if not has_instruction_like:
+        issues.append("Output does not look like assembler syntax.")
+
+    for idx, line in enumerate(asm_lines, start=1):
+        stripped = line.strip()
+        if stripped.endswith(":") and " " in stripped:
+            issues.append(f"Line {idx}: malformed label syntax '{stripped}'.")
+
+    return len(issues) == 0, issues
+
+
+def compiler_assemble_check(assembly_text: str, target_key: str) -> tuple[bool | None, str]:
+    target = SUPPORTED_TARGETS.get(target_key, SUPPORTED_TARGETS["cortex-m4"])
+    gcc = shutil.which("arm-none-eabi-gcc")
+
+    if not gcc:
+        return None, "arm-none-eabi-gcc not found; compilation check skipped."
+
+    try:
+        with tempfile.TemporaryDirectory(prefix="scancrypt_asm_check_") as tmpdir:
+            asm_file = Path(tmpdir) / "candidate.s"
+            out_file = Path(tmpdir) / "candidate.o"
+            asm_file.write_text(assembly_text, encoding="utf-8")
+
+            cmd = [
+                gcc,
+                "-x",
+                "assembler",
+                "-c",
+                str(asm_file),
+                "-o",
+                str(out_file),
+                "-mthumb",
+                f"-mcpu={target['mcpu']}",
+            ]
+            compile_result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=30,
+                check=False,
+            )
+            if compile_result.returncode == 0:
+                return True, "Compilation succeeded."
+
+            stderr = (compile_result.stderr or "").strip()
+            return False, stderr or "Compilation failed."
+    except subprocess.TimeoutExpired:
+        return False, "Compilation check timed out."
+    except Exception as exc:
+        return False, f"Compilation check failed: {exc}"
 
 
 @app.route("/upload-logo", methods=["POST"])
@@ -373,7 +512,7 @@ def determine_security_level(algorithm: str, code: str) -> str:
 
 
 def determine_implementation_type(code: str, filename: str = "") -> str:
-    if re.search(r"\b(masked|masking|share|NSHARES|refresh|randomize)\b", code, re.IGNORECASE):
+    if re.search(r"\b(masked|masking|share|NSHARES|refresh)\b", code, re.IGNORECASE):
         return "Masked Implementation"
 
     if re.search(r"__m256i|immintrin\.h|x86intrin\.h|avx2|__AVX2__", code, re.IGNORECASE):
@@ -626,6 +765,208 @@ def landing():
         other_lang=other_lang,
         other_lang_label=other_lang_label,
         other_lang_title=other_lang_title,
+    )
+
+
+@app.route("/assembly", methods=["GET", "POST"])
+def assembly_generator():
+    assembly_output = None
+    source_input = ""
+    selected_arch = "cortex-m4"
+    generation_result = None
+
+    if request.method == "POST":
+        selected_arch = request.form.get("target_arch", "cortex-m4")
+        if selected_arch not in SUPPORTED_TARGETS:
+            selected_arch = "cortex-m4"
+
+        source_input = (request.form.get("c_code") or "").strip()
+        uploaded_file = request.files.get("c_file")
+
+        if uploaded_file and uploaded_file.filename:
+            suffix = Path(uploaded_file.filename).suffix.lower()
+            if suffix not in {".c", ".h", ".cpp", ".cc", ".hpp", ".txt"}:
+                flash("Unsupported file type for assembly generation.", "warning")
+                return redirect(url_for("assembly_generator"))
+
+            uploaded_text = uploaded_file.stream.read().decode("utf-8", errors="ignore").strip()
+            if uploaded_text:
+                source_input = uploaded_text
+
+        if not source_input:
+            flash("Please paste C code or upload a C file.", "warning")
+            return redirect(url_for("assembly_generator"))
+
+        if len(source_input) > 200_000:
+            flash("Input too large. Keep source under 200KB for reliable processing.", "warning")
+            return redirect(url_for("assembly_generator"))
+
+        detected_ops = detect_supported_operations(source_input)
+        input_function = detect_input_function_name(source_input) or "not detected"
+        assumptions: list[str] = []
+        warnings: list[str] = []
+
+        if not detected_ops:
+            warnings.append("No clearly supported operation pattern was detected in the input source.")
+
+        if input_function == "not detected":
+            warnings.append("Input function could not be identified from the provided source.")
+
+        pommes_path = Path(__file__).parent / "PoMMES-main" / "release" / "POMMES"
+        if not pommes_path.exists():
+            flash("Generation executable not found under the configured release directory.", "danger")
+            return redirect(url_for("assembly_generator"))
+
+        execution_stdout = ""
+        execution_stderr = ""
+        exit_code = None
+
+        try:
+            with tempfile.TemporaryDirectory(prefix="pommes_input_") as tmpdir:
+                temp_input = Path(tmpdir) / "input.c"
+                temp_input.write_text(source_input, encoding="utf-8")
+
+                run_result = subprocess.run(
+                    [str(pommes_path)],
+                    cwd=str(pommes_path.parent),
+                    capture_output=True,
+                    text=True,
+                    timeout=120,
+                    check=False,
+                )
+
+            execution_stdout = run_result.stdout or ""
+            execution_stderr = run_result.stderr or ""
+            exit_code = run_result.returncode
+
+            combined = execution_stdout
+            if execution_stderr:
+                combined = f"{combined}\n{execution_stderr}" if combined else execution_stderr
+
+            assembly_output = (combined or "").strip() or "No output produced by the generation engine."
+
+            if run_result.returncode != 0:
+                flash(f"Generation engine returned a non-zero exit code: {run_result.returncode}", "warning")
+        except subprocess.TimeoutExpired:
+            flash("Generation engine execution timed out.", "danger")
+        except Exception as exc:
+            flash(f"Generation engine execution failed: {exc}", "danger")
+
+        syntax_ok, syntax_issues = basic_assembly_syntax_check(assembly_output or "")
+        compile_ok, compile_message = compiler_assemble_check(assembly_output or "", selected_arch)
+
+        mapping_notes = [
+            f"Input function candidate: {input_function}",
+            "Generated output is currently produced by the executable's configured internal case-study flow.",
+        ]
+        assumptions.append("Operation support is based on pattern detection, not full semantic verification.")
+        assumptions.append("Target profile selection configures validation context and reporting assumptions.")
+
+        limitations = [
+            "Generated output is an implementation candidate and is not automatically secure.",
+            "Functional equivalence between input C and generated assembly is not formally verified.",
+            "Current executable workflow may rely on internal benchmark/case-study inputs.",
+            "Supported C subset is intentionally limited to the documented input profile.",
+        ]
+
+        countermeasures = [
+            "instruction replacement",
+            "register allocation constraints",
+            "hardened sequence generation",
+        ]
+
+        artifact_base = f"asm_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid4().hex[:8]}"
+        source_filename = f"{artifact_base}.c"
+        asm_filename = f"{artifact_base}.s"
+        log_filename = f"{artifact_base}.log"
+
+        source_path = ASSEMBLY_OUTPUT_FOLDER / source_filename
+        asm_path = ASSEMBLY_OUTPUT_FOLDER / asm_filename
+        log_path = ASSEMBLY_OUTPUT_FOLDER / log_filename
+
+        source_path.write_text(source_input, encoding="utf-8")
+        asm_path.write_text(assembly_output or "", encoding="utf-8")
+        log_path.write_text(
+            "\n".join(
+                [
+                    "ScanCrypt Assembly Generation Execution Log",
+                    f"Timestamp: {datetime.now().isoformat()}",
+                    f"Target: {SUPPORTED_TARGETS[selected_arch]['label']}",
+                    f"Input function: {input_function}",
+                    f"Detected operations: {', '.join(detected_ops) if detected_ops else 'None'}",
+                    f"Generator exit code: {exit_code}",
+                    "",
+                    "[STDOUT]",
+                    execution_stdout,
+                    "",
+                    "[STDERR]",
+                    execution_stderr,
+                    "",
+                    "[SYNTAX CHECK]",
+                    f"ok={syntax_ok}",
+                    *syntax_issues,
+                    "",
+                    "[COMPILATION CHECK]",
+                    f"result={compile_ok}",
+                    compile_message,
+                    "",
+                    "[WARNINGS]",
+                    *warnings,
+                    "",
+                    "[ASSUMPTIONS]",
+                    *assumptions,
+                    "",
+                    "[LIMITATIONS]",
+                    *limitations,
+                ]
+            ),
+            encoding="utf-8",
+        )
+
+        generation_result = {
+            "title": "Generated Implementation Candidate",
+            "target": SUPPORTED_TARGETS[selected_arch]["label"],
+            "input_function": input_function,
+            "countermeasures": countermeasures,
+            "syntax_ok": syntax_ok,
+            "syntax_issues": syntax_issues,
+            "compile_ok": compile_ok,
+            "compile_message": compile_message,
+            "equivalence_note": "Functional equivalence not yet formally verified.",
+            "detected_operations": detected_ops,
+            "warnings": warnings,
+            "assumptions": assumptions,
+            "limitations": limitations,
+            "mapping_notes": mapping_notes,
+            "flow_steps": FLOW_STEPS,
+            "downloads": {
+                "source": url_for("static", filename=f"reports/assembly/{source_filename}"),
+                "assembly": url_for("static", filename=f"reports/assembly/{asm_filename}"),
+                "log": url_for("static", filename=f"reports/assembly/{log_filename}"),
+            },
+        }
+
+    logo_fn = get_logo_filename()
+    logo_url = url_for("static", filename=f"uploads/{logo_fn}") if logo_fn else None
+    lang = get_lang_from_request()
+    t = TRANSLATIONS.get(lang, TRANSLATIONS["en"])
+    other_lang = "de" if lang == "en" else "en"
+    other_lang_label = "DE" if lang == "en" else "EN"
+    other_lang_title = "Deutsch" if lang == "en" else "English"
+    return render_template(
+        "assembly.html",
+        logo_url=logo_url,
+        t=t,
+        current_lang=lang,
+        other_lang=other_lang,
+        other_lang_label=other_lang_label,
+        other_lang_title=other_lang_title,
+        assembly_output=assembly_output,
+        source_input=source_input,
+        selected_arch=selected_arch,
+        supported_targets=SUPPORTED_TARGETS,
+        supported_c_subset=SUPPORTED_C_SUBSET,
+        generation_result=generation_result,
     )
 
 

@@ -1,8 +1,12 @@
+> **Standards notice:** This rule set targets NIST FIPS 204 and is maintained independently. NIST currently publishes an errata list containing potential corrections for a future update of FIPS 204. Scan results should therefore state the standard and errata baseline used by the analyzer.
+
 # ScanCrypt
 
 **ScanCrypt** is a static analysis platform designed to identify and classify post-quantum cryptographic implementations before performing security assessments. The project focuses on helping developers and security engineers understand and evaluate implementations of standardized post-quantum algorithms such as **ML-DSA (Dilithium)** and **ML-KEM (Kyber)**.
 
 The current release provides automatic project inspection by detecting the implemented cryptographic algorithm, its security level, and the implementation type.
+
+For ML-DSA assessments, ScanCrypt is based on an internal FIPS 204 conformance-rule baseline intended for implementation review, migration support, and readiness testing.
 
 ---
 

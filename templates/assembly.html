@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="{{ current_lang }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ t.assembly_title }}</title>
+    <style>
+      :root { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color-scheme: dark; color: #e5e7eb; }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #000000; color: #e5e7eb; }
+      .nav { display:flex; align-items:center; justify-content:space-between; padding:20px 40px; max-width:1200px; margin:0 auto; }
+      .brand { display:flex; align-items:center; gap:14px; }
+      .logo { width:56px; height:56px; display:inline-flex; align-items:center; justify-content:center; background:#fff; border-radius:10px; box-shadow:0 6px 18px rgba(15,23,42,.08); font-weight:800; color:#4f46e5; }
+      .nav-links { display:flex; gap:20px; align-items:center; margin:0 auto; }
+      .nav-links a { color:#d1d5db; text-decoration:none; font-weight:600; }
+      .nav-actions { display:flex; align-items:center; gap:12px; }
+      .lang { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; color:#d1d5db; background:rgba(255,255,255,0.08); border-radius:999px; text-decoration:none; border:1px solid rgba(209,213,219,0.16); }
+      .lang svg { display:block; width:18px; height:18px; }
+      .login-button { display:inline-flex; align-items:center; justify-content:center; padding:8px 16px; color:#e5e7eb; background:#4338ca; border-radius:999px; text-decoration:none; font-weight:700; border:1px solid rgba(255,255,255,0.12); }
+
+      .page { max-width:1200px; margin:0 auto; padding:10px 40px 40px; }
+      h1 { margin: 14px 0 8px; font-size: clamp(1.8rem, 3vw, 2.6rem); }
+      p.lead { margin: 0 0 22px; color: #cbd5e1; }
+      .disclaimer { margin: 8px 0 18px; padding: 10px 12px; border-radius: 10px; border:1px solid rgba(251,191,36,.35); background: rgba(120,53,15,.25); color:#fde68a; font-size:0.93rem; }
+      .docs-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
+      .doc-card { border:1px solid rgba(148,163,184,0.35); border-radius:12px; background:rgba(15,23,42,.45); padding:12px 14px; }
+      .doc-card h3 { margin:0 0 8px; font-size:0.96rem; color:#a5b4fc; }
+      .doc-card ul { margin:0; padding-left:18px; color:#cbd5e1; line-height:1.5; font-size:0.9rem; }
+
+      .alert { border-radius: 12px; padding: 12px 14px; margin: 10px 0 16px; font-size: 0.95rem; }
+      .alert-warning { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+      .alert-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+      .alert-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+
+      .grid { display:grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+      .box { border:1px solid rgba(209,213,219,0.35); border-radius:14px; background:rgba(17,24,39,0.55); padding:18px; min-height:520px; }
+      .box h2 { margin:0 0 12px; font-size:1.08rem; }
+      .help { color:#cbd5e1; font-size:0.95rem; margin-bottom:12px; }
+      .flow { margin:0 0 14px; padding:12px; border-radius:10px; border:1px dashed rgba(148,163,184,.45); background:rgba(15,23,42,.35); color:#cbd5e1; font-size:0.9rem; }
+      .flow-steps { margin:0; padding-left:18px; display:grid; gap:4px; }
+      .select-wrap { margin:10px 0 12px; }
+      select { width:100%; border-radius:10px; border:1px solid #374151; padding:10px; background:#0b1220; color:#e5e7eb; }
+
+      textarea { width:100%; max-width:100%; min-height:320px; border-radius:12px; border:1px solid #374151; background:#0b1220; color:#e5e7eb; padding:12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size:0.92rem; resize:vertical; }
+      input[type="file"] { width:100%; max-width:100%; margin-top:12px; border-radius:10px; border:1px solid #374151; padding:10px; background:#0b1220; color:#d1d5db; }
+      .actions { margin-top:14px; display:flex; justify-content:flex-start; }
+      button { border:none; color:white; background:#4f46e5; border-radius:12px; padding:12px 16px; font-size:0.95rem; font-weight:700; cursor:pointer; }
+      button:hover { background:#4338ca; }
+
+      pre { margin:0; white-space:pre-wrap; word-break:break-word; min-height:450px; color:#e5e7eb; background:#050b14; border:1px solid #1f2937; border-radius:10px; padding:12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size:0.86rem; line-height:1.4; overflow:auto; }
+      .placeholder { color:#94a3b8; }
+      .result-panel { margin-top:16px; border:1px solid rgba(148,163,184,.4); border-radius:12px; background:rgba(2,6,23,.5); padding:12px; }
+      .result-panel h3 { margin:0 0 10px; color:#c7d2fe; font-size:1rem; }
+      .result-meta { display:grid; gap:6px; margin-bottom:10px; color:#d1d5db; font-size:0.9rem; }
+      .checks { margin:8px 0 10px; padding-left:18px; color:#cbd5e1; font-size:0.9rem; }
+      .checks li { margin:4px 0; }
+      .warn-list, .small-list { margin:8px 0 0 0; padding-left:18px; color:#cbd5e1; font-size:0.88rem; }
+      .warn-list li { color:#fca5a5; }
+      .download-links { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+      .download-links a { display:inline-flex; align-items:center; justify-content:center; padding:8px 10px; border-radius:8px; border:1px solid rgba(165,180,252,.5); color:#e0e7ff; text-decoration:none; background:rgba(67,56,202,.25); font-size:0.85rem; font-weight:700; }
+
+      @media (max-width: 960px) {
+        .nav { padding:16px 20px; }
+        .page { padding:8px 20px 28px; }
+        .docs-grid { grid-template-columns:1fr; }
+        .grid { grid-template-columns: 1fr; }
+        .box { min-height: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="brand">
+        {% if logo_url %}
+        <img src="{{ logo_url }}" alt="Company logo" style="width:56px;height:56px;display:inline-flex;border-radius:10px;object-fit:contain;background:#111827;padding:6px;" />
+        {% else %}
+        <div class="logo">SC</div>
+        {% endif %}
+        <div>
+          <div style="font-weight:800;color:inherit;">ScanCrypt</div>
+          <div style="font-size:0.85rem;color:inherit;opacity:0.8;">{{ t.tagline }}</div>
+        </div>
+      </div>
+
+      <div class="nav-links">
+        <a href="/scan">{{ t.nav_news }}</a>
+        <a href="/services">{{ t.nav_services }}</a>
+        <a href="/about">{{ t.nav_about }}</a>
+        <a href="/pricing">{{ t.nav_pricing }}</a>
+        <a href="/contact">{{ t.nav_contact }}</a>
+      </div>
+      <div class="nav-actions">
+        <a class="lang" href="?lang={{ other_lang }}" title="{{ other_lang_title }}">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="#d1d5db" stroke-width="1.5" />
+            <path d="M4 12H20M12 4C16 4 18 6.5 18 12C18 17.5 16 20 12 20C8 20 6 17.5 6 12C6 6.5 8 4 12 4Z" stroke="#d1d5db" stroke-width="1.5"/>
+            <path d="M12 4C9.23858 4 7 6.23858 7 9C7 11.7614 9.23858 14 12 14C14.7614 14 17 11.7614 17 9C17 6.23858 14.7614 4 12 4Z" stroke="#d1d5db" stroke-width="1.5"/>
+          </svg>
+          {{ other_lang_label }}
+        </a>
+        <a class="login-button" href="/login">Login</a>
+      </div>
+    </header>
+
+    <main class="page">
+      <h1>{{ t.assembly_h1 }}</h1>
+      <p class="lead">{{ t.assembly_lead }}</p>
+      <div class="disclaimer">
+        {{ "Generated code is an implementation candidate and is not claimed to be automatically secure." if current_lang == "en" else "Der generierte Code ist ein Implementierungskandidat und wird nicht als automatisch sicher ausgewiesen." }}
+      </div>
+
+      <section class="docs-grid">
+        <article class="doc-card">
+          <h3>{{ "Supported C Subset" if current_lang == "en" else "Unterstützte C-Teilmenge" }}</h3>
+          <ul>
+            {% for item in supported_c_subset %}
+            <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </article>
+        <article class="doc-card">
+          <h3>{{ "Supported Architectures" if current_lang == "en" else "Unterstützte Architekturen" }}</h3>
+          <ul>
+            {% for key, arch in supported_targets.items() %}
+            <li>{{ arch.label }}</li>
+            {% endfor %}
+          </ul>
+        </article>
+      </section>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <div class="grid">
+        <section class="box">
+          <h2>{{ t.assembly_input_title }}</h2>
+          <div class="help">{{ t.assembly_input_help }}</div>
+          <div class="flow">
+            <strong>{{ "Flow" if current_lang == "en" else "Ablauf" }}</strong>
+            <ol class="flow-steps">
+              <li>C input</li>
+              <li>Input validation</li>
+              <li>Supported operation detection</li>
+              <li>Architecture selection</li>
+              <li>Generator execution</li>
+              <li>Generated code</li>
+              <li>Warnings and assumptions</li>
+              <li>Downloadable output</li>
+            </ol>
+          </div>
+          <form method="post" enctype="multipart/form-data">
+            <div class="select-wrap">
+              <label for="target_arch">{{ "Target architecture" if current_lang == "en" else "Zielarchitektur" }}</label>
+              <select id="target_arch" name="target_arch">
+                {% for key, arch in supported_targets.items() %}
+                <option value="{{ key }}" {% if selected_arch == key %}selected{% endif %}>{{ arch.label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <textarea name="c_code" placeholder="int main(void) { return 0; }">{{ source_input }}</textarea>
+            <input type="file" name="c_file" accept=".c,.h,.cpp,.cc,.hpp,.txt" aria-label="{{ t.assembly_upload_label }}" />
+            <div class="actions">
+              <button type="submit">{{ t.assembly_generate_button }}</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="box">
+          <h2>{{ t.assembly_result_title }}</h2>
+          {% if assembly_output %}
+          <pre>{{ assembly_output }}</pre>
+          {% else %}
+          <pre class="placeholder">{{ t.assembly_result_placeholder }}</pre>
+          {% endif %}
+
+          {% if generation_result %}
+          <div class="result-panel">
+            <h3>{{ generation_result.title }}</h3>
+            <div class="result-meta">
+              <div><strong>Target:</strong> {{ generation_result.target }}</div>
+              <div><strong>Input function:</strong> {{ generation_result.input_function }}()</div>
+            </div>
+
+            <div><strong>{{ "Countermeasures applied" if current_lang == "en" else "Angewendete Gegenmaßnahmen" }}:</strong></div>
+            <ul class="checks">
+              {% for item in generation_result.countermeasures %}
+              <li>✓ {{ item }}</li>
+              {% endfor %}
+            </ul>
+
+            <div><strong>Validation:</strong></div>
+            <ul class="checks">
+              <li>{% if generation_result.syntax_ok %}✓{% else %}✗{% endif %} assembly syntax checked</li>
+              <li>
+                {% if generation_result.compile_ok is sameas true %}✓{% elif generation_result.compile_ok is sameas false %}✗{% else %}•{% endif %}
+                {% if generation_result.compile_ok is sameas true %}compilation succeeded{% elif generation_result.compile_ok is sameas false %}compilation failed{% else %}compilation check skipped{% endif %}
+              </li>
+              <li>⚠ {{ generation_result.equivalence_note }}</li>
+            </ul>
+
+            {% if generation_result.detected_operations %}
+            <div><strong>{{ "Supported operation detection" if current_lang == "en" else "Erkannte unterstützte Operationen" }}:</strong></div>
+            <ul class="small-list">
+              {% for op in generation_result.detected_operations %}
+              <li>{{ op }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if generation_result.mapping_notes %}
+            <div><strong>{{ "Input/Output mapping" if current_lang == "en" else "Eingabe/Ausgabe-Mapping" }}:</strong></div>
+            <ul class="small-list">
+              {% for note in generation_result.mapping_notes %}
+              <li>{{ note }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if generation_result.warnings %}
+            <div><strong>Warnings:</strong></div>
+            <ul class="warn-list">
+              {% for warning in generation_result.warnings %}
+              <li>{{ warning }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if generation_result.assumptions %}
+            <div><strong>{{ "Assumptions" if current_lang == "en" else "Annahmen" }}:</strong></div>
+            <ul class="small-list">
+              {% for assumption in generation_result.assumptions %}
+              <li>{{ assumption }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if generation_result.limitations %}
+            <div><strong>{{ "Explicit limitations" if current_lang == "en" else "Explizite Einschränkungen" }}:</strong></div>
+            <ul class="small-list">
+              {% for limitation in generation_result.limitations %}
+              <li>{{ limitation }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+
+            <div class="download-links">
+              <a href="{{ generation_result.downloads.source }}" download>Download source</a>
+              <a href="{{ generation_result.downloads.assembly }}" download>Download assembly</a>
+              <a href="{{ generation_result.downloads.log }}" download>Download execution log</a>
+            </div>
+          </div>
+          {% endif %}
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

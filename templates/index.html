@@ -12,8 +12,8 @@
         color: #e5e7eb;
       }
       * { box-sizing: border-box; }
-      body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-      .app-shell { width: 100%; max-width: 980px; }
+      body { margin: 0; min-height: 100vh; background: #000000; color: #e5e7eb; }
+      .app-shell { width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px 40px 40px; }
       .nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
       .nav-links { display:flex; gap:16px; align-items:center; }
       .nav-links a { color:#d1d5db; text-decoration:none; font-weight:600; font-size:0.95rem; }
@@ -64,6 +64,10 @@
       th { font-size: 0.95rem; font-weight: 700; color: #374151; }
       td { font-size: 0.96rem; color: #111827; }
       .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+      @media (max-width: 900px) {
+        .app-shell { padding: 18px 20px 28px; }
+        .nav { flex-wrap: wrap; gap: 10px; }
+      }
     </style>
   </head>
   <body>
