@@ -1,0 +1,314 @@
+Parameter Validation
+FIPS203-STATIC-005
+
+Verify polynomial degree (n = 256).
+
+FIPS203-STATIC-006
+
+Verify modulus (q = 3329).
+
+FIPS203-STATIC-007
+
+Verify parameter k.
+
+FIPS203-STATIC-008
+
+Verify parameter η1.
+
+FIPS203-STATIC-009
+
+Verify parameter η2.
+
+FIPS203-STATIC-010
+
+Verify parameter du.
+
+FIPS203-STATIC-011
+
+Verify parameter dv.
+
+FIPS203-STATIC-012
+
+Verify compression constants.
+
+FIPS203-STATIC-013
+
+Verify polynomial dimensions.
+
+FIPS203-STATIC-014
+
+Verify matrix dimensions.
+
+Hash / XOF
+FIPS203-STATIC-015
+
+Verify SHAKE128 usage.
+
+FIPS203-STATIC-016
+
+Verify SHAKE256 usage.
+
+FIPS203-STATIC-017
+
+Verify SHA3-256 usage.
+
+FIPS203-STATIC-018
+
+Verify SHA3-512 usage.
+
+FIPS203-STATIC-019
+
+Reject unsupported hash substitutions.
+
+FIPS203-STATIC-020
+
+Verify required output lengths.
+
+FIPS203-STATIC-021
+
+Verify domain separation.
+
+Key Generation
+FIPS203-STATIC-022
+
+Verify seed length.
+
+FIPS203-STATIC-023
+
+Verify matrix expansion.
+
+FIPS203-STATIC-024
+
+Verify CBD sampling.
+
+FIPS203-STATIC-025
+
+Verify secret vector dimensions.
+
+FIPS203-STATIC-026
+
+Verify error vector dimensions.
+
+FIPS203-STATIC-027
+
+Verify public-key construction.
+
+FIPS203-STATIC-028
+
+Verify secret-key construction.
+
+FIPS203-STATIC-029
+
+Verify hash(pk) inclusion.
+
+FIPS203-STATIC-030
+
+Verify secret key field ordering.
+
+Encapsulation
+FIPS203-STATIC-031
+
+Verify randomness length.
+
+FIPS203-STATIC-032
+
+Verify message generation.
+
+FIPS203-STATIC-033
+
+Verify encryption seed derivation.
+
+FIPS203-STATIC-034
+
+Verify challenge generation.
+
+FIPS203-STATIC-035
+
+Verify polynomial encoding.
+
+FIPS203-STATIC-036
+
+Verify ciphertext construction.
+
+FIPS203-STATIC-037
+
+Verify ciphertext field ordering.
+
+FIPS203-STATIC-038
+
+Verify ciphertext compression.
+
+Decapsulation
+FIPS203-STATIC-039
+
+Verify ciphertext decoding.
+
+FIPS203-STATIC-040
+
+Verify ciphertext decompression.
+
+FIPS203-STATIC-041
+
+Verify secret-key decoding.
+
+FIPS203-STATIC-042
+
+Verify recomputation of ciphertext.
+
+FIPS203-STATIC-043
+
+Verify implicit rejection logic.
+
+FIPS203-STATIC-044
+
+Verify shared-secret derivation.
+
+FIPS203-STATIC-045
+
+Verify comparison against recomputed ciphertext.
+
+NTT Operations
+FIPS203-STATIC-046
+
+Verify forward NTT implementation.
+
+FIPS203-STATIC-047
+
+Verify inverse NTT implementation.
+
+FIPS203-STATIC-048
+
+Verify Montgomery reduction.
+
+FIPS203-STATIC-049
+
+Verify Barrett reduction.
+
+FIPS203-STATIC-050
+
+Verify NTT constants.
+
+FIPS203-STATIC-051
+
+Verify twiddle factors.
+
+FIPS203-STATIC-052
+
+Verify polynomial multiplication flow.
+
+Encoding / Compression
+FIPS203-STATIC-053
+
+Verify coefficient packing.
+
+FIPS203-STATIC-054
+
+Verify polynomial packing.
+
+FIPS203-STATIC-055
+
+Verify public-key encoding.
+
+FIPS203-STATIC-056
+
+Verify secret-key encoding.
+
+FIPS203-STATIC-057
+
+Verify ciphertext encoding.
+
+FIPS203-STATIC-058
+
+Verify endian correctness.
+
+FIPS203-STATIC-059
+
+Verify bit widths.
+
+FIPS203-STATIC-060
+
+Verify compression formulas.
+
+API Validation
+FIPS203-STATIC-061
+
+Detect KeyGen API.
+
+FIPS203-STATIC-062
+
+Detect Encaps API.
+
+FIPS203-STATIC-063
+
+Detect Decaps API.
+
+FIPS203-STATIC-064
+
+Verify input lengths.
+
+FIPS203-STATIC-065
+
+Verify output lengths.
+
+FIPS203-STATIC-066
+
+Verify parameter consistency across APIs.
+
+Buffer Validation
+FIPS203-STATIC-067
+
+Verify public-key size.
+
+FIPS203-STATIC-068
+
+Verify secret-key size.
+
+FIPS203-STATIC-069
+
+Verify ciphertext size.
+
+FIPS203-STATIC-070
+
+Verify shared-secret size.
+
+Randomness
+FIPS203-STATIC-071
+
+Reject rand().
+
+FIPS203-STATIC-072
+
+Reject srand().
+
+FIPS203-STATIC-073
+
+Reject time() as entropy.
+
+FIPS203-STATIC-074
+
+Verify cryptographically secure RNG usage.
+
+FIPS203-STATIC-075
+
+Verify randomness propagation.
+
+Memory / Error Handling
+FIPS203-STATIC-076
+
+Verify secret-key zeroization.
+
+FIPS203-STATIC-077
+
+Verify temporary secret cleanup.
+
+FIPS203-STATIC-078
+
+Verify randomness cleanup.
+
+FIPS203-STATIC-079
+
+Verify decoding error handling.
+
+FIPS203-STATIC-080
+
+Verify API failure propagation.

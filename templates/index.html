@@ -15,11 +15,13 @@
       body { margin: 0; min-height: 100vh; background: #000000; color: #e5e7eb; }
       .app-shell { width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px 40px 40px; }
       .nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-      .nav-links { display:flex; gap:16px; align-items:center; }
+      .brand { display:flex; align-items:center; gap:14px; }
+      .logo { width:56px; height:56px; display:inline-flex; align-items:center; justify-content:center; background:#fff; border-radius:10px; box-shadow:0 6px 18px rgba(15,23,42,.08); font-weight:800; color:#4f46e5; }
+      .nav-links { display:flex; gap:20px; align-items:center; margin:0 auto; }
       .nav-links a { color:#d1d5db; text-decoration:none; font-weight:600; font-size:0.95rem; }
       .nav-actions { display:flex; align-items:center; gap:10px; }
       .lang { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; color:#d1d5db; background:rgba(255,255,255,0.08); border-radius:999px; text-decoration:none; border:1px solid rgba(209,213,219,0.16); font-size:0.85rem; }
-      .lang svg { width:16px; height:16px; }
+      .lang svg { width:18px; height:18px; }
       .login-button { display:inline-flex; align-items:center; justify-content:center; padding:8px 14px; color:#e5e7eb; background:#4338ca; border-radius:999px; text-decoration:none; font-weight:700; border:1px solid rgba(255,255,255,0.12); font-size:0.88rem; }
       .hero { padding: 32px 36px; border-radius: 28px 28px 20px 20px; background: linear-gradient(180deg, #4f46e5 0%, #6366f1 100%); color: white; box-shadow: 0 30px 80px rgba(15, 23, 42, 0.18); }
       .hero h1 { margin: 0 0 12px; font-size: clamp(2rem, 2.4vw, 2.8rem); letter-spacing: -0.04em; }
@@ -31,6 +33,7 @@
       .file-input-wrapper { display: grid; gap: 12px; }
       input[type="file"] { border-radius: 16px; border: 1px solid #d1d5db; padding: 14px 16px; cursor: pointer; background: #f8fafc; }
       .hint { color: #6b7280; font-size: 0.94rem; }
+      .audit-description { margin-bottom: 14px; padding: 12px 14px; border-radius: 12px; border: 1px solid #c7d2fe; background: #eef2ff; color: #312e81; font-size: 0.93rem; line-height: 1.6; }
       .button-group { display: flex; justify-content: flex-end; margin-top: 24px; }
       button { border: none; color: white; background: #4338ca; border-radius: 16px; padding: 14px 24px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform .16s ease, background .16s ease; }
       button:hover { background: #3730a3; transform: translateY(-1px); }
@@ -57,6 +60,16 @@
       .evidence-header { font-size: 0.95rem; font-weight: 700; color: #a5b4fc; margin-bottom: 12px; }
       .evidence-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
       .evidence-list li { color: #d1d5db; font-size: 0.9rem; }
+      .audit-summary { display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 12px; }
+      .audit-pill { background:#111827; border:1px solid #374151; border-radius:999px; padding:6px 10px; color:#e5e7eb; font-size:0.86rem; }
+      .audit-table-wrap { overflow-x: auto; }
+      .audit-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+      .audit-table th, .audit-table td { text-align:left; padding:10px 8px; border-bottom:1px solid #333; color:#e5e7eb; font-size:0.9rem; vertical-align: top; }
+      .audit-table th { color:#a5b4fc; font-weight:700; }
+      .audit-rule-name { white-space: nowrap; }
+      .status-pass { color:#22c55e; font-weight:700; }
+      .status-fail { color:#f87171; font-weight:700; }
+      .status-na { color:#facc15; font-weight:700; }
       .download-report { display: inline-block; margin-top: 14px; text-decoration: none; color: #fff; background: #0f766e; border: 1px solid #14b8a6; border-radius: 12px; padding: 10px 14px; font-weight: 700; font-size: 0.92rem; }
       .download-report:hover { background: #115e59; }
       table { width: 100%; border-collapse: collapse; margin-top: 18px; }
@@ -73,8 +86,20 @@
   <body>
     <div class="app-shell">
       <header class="nav">
+        <div class="brand">
+          {% if logo_url %}
+          <img src="{{ logo_url }}" alt="Company logo" style="width:56px;height:56px;display:inline-flex;border-radius:10px;object-fit:contain;background:#111827;padding:6px;" />
+          {% else %}
+          <div class="logo">SC</div>
+          {% endif %}
+          <div>
+            <div style="font-weight:800;color:inherit;">ScanCrypt</div>
+            <div style="font-size:0.85rem;color:inherit;opacity:0.8;">{{ t.tagline }}</div>
+          </div>
+        </div>
+
         <div class="nav-links">
-          <a href="/">{{ t.nav_news }}</a>
+          <a href="http://192.168.0.154:5000/">{{ t.nav_news }}</a>
           <a href="/services">{{ t.nav_services }}</a>
           <a href="/about">{{ t.nav_about }}</a>
           <a href="/pricing">{{ t.nav_pricing }}</a>
@@ -85,6 +110,7 @@
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="10" stroke="#d1d5db" stroke-width="1.5" />
               <path d="M4 12H20M12 4C16 4 18 6.5 18 12C18 17.5 16 20 12 20C8 20 6 17.5 6 12C6 6.5 8 4 12 4Z" stroke="#d1d5db" stroke-width="1.5"/>
+              <path d="M12 4C9.23858 4 7 6.23858 7 9C7 11.7614 9.23858 14 12 14C14.7614 14 17 11.7614 17 9C17 6.23858 14.7614 4 12 4Z" stroke="#d1d5db" stroke-width="1.5"/>
             </svg>
             {{ other_lang_label }}
           </a>
@@ -112,6 +138,10 @@
           <form method="post" enctype="multipart/form-data">
             <div class="form-row">
               <div class="file-input-wrapper">
+                <div class="audit-description">
+                  <strong>{{ "Auditing scope" if current_lang == "en" else "Prüfungsumfang" }}:</strong>
+                  {{ "This scan runs static conformance checks for supported schemes (starting with ML-DSA) and reports per-rule pass/fail outcomes with evidence." if current_lang == "en" else "Dieser Scan führt statische Konformitätsprüfungen für unterstützte Verfahren (beginnend mit ML-DSA) aus und meldet pro Regel Pass/Fail-Ergebnisse mit Nachweisen." }}
+                </div>
                 <label for="source_files">{{ t.upload_label }}</label>
                 <input id="source_files" name="source_files" type="file" webkitdirectory directory multiple accept=".c,.h,.cpp,.cc" />
                 <div class="hint">{{ t.upload_hint }}</div>
@@ -186,42 +216,42 @@
                   </div>
                 </div>
 
-                {% if result.algorithm_evidence or result.implementation_evidence or result.missing_information %}
+                {% if result.findings %}
                 <div class="evidence-section">
-                  <div class="evidence-header">{{ "Detection Evidence" if current_lang == "en" else "Erkennungsnachweise" }}</div>
-
-                  {% if result.algorithm_evidence %}
-                  <div style="margin-bottom:10px;">
-                    <div class="evidence-header" style="font-size:0.92rem; color:#9ca3af; font-weight:700; margin-bottom:6px;">{{ "Algorithm Evidence" if current_lang == "en" else "Algorithmus-Nachweise" }}</div>
-                    <ul class="evidence-list">
-                      {% for item in result.algorithm_evidence %}
-                      <li>• {{ item }}</li>
-                      {% endfor %}
-                    </ul>
+                  <div class="evidence-header">{{ "Auditing Results" if current_lang == "en" else "Prüfergebnisse" }}</div>
+                  <div class="audit-summary">
+                    <span class="audit-pill">{{ "Rules" if current_lang == "en" else "Regeln" }}: {{ result.rules_executed }}</span>
+                    <span class="audit-pill">{{ "Passed" if current_lang == "en" else "Bestanden" }}: {{ result.rules_passed }}</span>
+                    <span class="audit-pill">{{ "Failed" if current_lang == "en" else "Fehlgeschlagen" }}: {{ result.rules_failed }}</span>
                   </div>
-                  {% endif %}
 
-                  {% if result.implementation_evidence %}
-                  <div style="margin-top:12px;">
-                    <div class="evidence-header" style="font-size:0.92rem; color:#9ca3af; font-weight:700; margin-bottom:6px;">{{ "Implementation Evidence" if current_lang == "en" else "Implementierungs-Nachweise" }}</div>
-                    <ul class="evidence-list">
-                      {% for item in result.implementation_evidence %}
-                      <li>• {{ item }}</li>
+                  <div class="audit-table-wrap">
+                  <table class="audit-table">
+                    <thead>
+                      <tr>
+                        <th>{{ "Rule" if current_lang == "en" else "Regel" }}</th>
+                        <th>{{ "Status" if current_lang == "en" else "Status" }}</th>
+                        <th>{{ "Severity" if current_lang == "en" else "Schwere" }}</th>
+                        <th>{{ "Description" if current_lang == "en" else "Beschreibung" }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for f in result.findings %}
+                      <tr>
+                        <td class="audit-rule-name">{{ f.rule_id }}</td>
+                        <td>
+                          {% set s = (f.status or '')|lower %}
+                          {% if s == 'passed' %}<span class="status-pass">{{ f.status }}</span>
+                          {% elif s == 'failed' %}<span class="status-fail">{{ f.status }}</span>
+                          {% else %}<span class="status-na">{{ f.status }}</span>{% endif %}
+                        </td>
+                        <td>{{ f.severity }}</td>
+                        <td>{{ f.description }}</td>
+                      </tr>
                       {% endfor %}
-                    </ul>
+                    </tbody>
+                  </table>
                   </div>
-                  {% endif %}
-
-                  {% if result.missing_information %}
-                  <div style="margin-top:12px;">
-                    <div class="evidence-header" style="font-size:0.92rem; color:#fca5a5; font-weight:700; margin-bottom:6px;">{{ "Missing Information" if current_lang == "en" else "Fehlende Informationen" }}</div>
-                    <ul class="evidence-list">
-                      {% for item in result.missing_information %}
-                      <li>• {{ item }}</li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                  {% endif %}
 
                 </div>
                 {% endif %}

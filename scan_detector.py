@@ -2,6 +2,7 @@ import os
 import re
 import json
 from pathlib import Path
+from audit_engine import AuditEngine
 
 SUPPORTED_EXTS = {".c", ".h", ".cpp", ".cc", ".hpp", ".S", ".s", ".asm"}
 SUPPORTED_NAMES = {"cmakelists.txt", "makefile"}
@@ -226,6 +227,12 @@ def analyze_project(path: str):
         else:
             security_level = "Unknown ML-KEM Variant"
 
+    # Scheme-aware auditing is handled by a separate class-based engine.
+    findings = AuditEngine(chosen_family=chosen_family, all_files=all_files).run()
+    rules_executed = len(findings)
+    rules_passed = sum(1 for f in findings if str(f.get("status", "")).lower() == "passed")
+    rules_failed = sum(1 for f in findings if str(f.get("status", "")).lower() == "failed")
+
     # Confidence calculation
     base = 40
     family_score = family_scores.get(chosen_family, 0) if chosen_family else 0
@@ -325,6 +332,10 @@ def analyze_project(path: str):
         "algorithm_evidence": algorithm_evidence,
         "implementation_evidence": impl_evidence_list,
         "missing_information": missing_information,
+        "findings": findings,
+        "rules_executed": rules_executed,
+        "rules_passed": rules_passed,
+        "rules_failed": rules_failed,
     }
 
     return result

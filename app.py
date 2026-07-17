@@ -684,16 +684,16 @@ def index():
                 "lines_of_code": project_result.get("lines_of_code", 0),
                 "analysis_confidence": project_result.get("analysis_confidence", "0%"),
                 "detection_confidence": project_result.get("analysis_confidence", "0%"),
-                "rules_executed": 0,
-                "rules_passed": 0,
-                "rules_failed": 0,
+                "rules_executed": project_result.get("rules_executed", 0),
+                "rules_passed": project_result.get("rules_passed", 0),
+                "rules_failed": project_result.get("rules_failed", 0),
                 "analysis_duration": "N/A",
                 "detection_evidence": (
                     (project_result.get("algorithm_evidence", []) or [])
                     + (project_result.get("implementation_evidence", []) or [])
                     + (project_result.get("missing_information", []) or [])
                 ),
-                "findings": [],
+                "findings": project_result.get("findings", []),
                 "analysed_files": analyzed_files,
                 "scan_configuration": "Default ScanCrypt profile",
                 "supported_algorithms": ["ML-DSA (Dilithium)", "ML-KEM (Kyber)"],
@@ -725,6 +725,10 @@ def index():
             "algorithm_evidence": project_result.get("algorithm_evidence", [])[:50],
             "implementation_evidence": project_result.get("implementation_evidence", [])[:50],
             "missing_information": project_result.get("missing_information", []),
+            "findings": project_result.get("findings", []),
+            "rules_executed": project_result.get("rules_executed", 0),
+            "rules_passed": project_result.get("rules_passed", 0),
+            "rules_failed": project_result.get("rules_failed", 0),
             "report_url": report_url,
         }
 

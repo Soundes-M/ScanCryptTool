@@ -1,0 +1,653 @@
+FIPS204-STATIC-005 — Coefficient modulus is correct
+
+Verify:
+
+q = 8380417
+FIPS204-STATIC-006 — Power2Round parameter is correct
+
+Verify:
+
+d = 13
+FIPS204-STATIC-007 — ML-DSA-44 constants are correct
+
+Verify that ML-DSA-44 uses the required values of:
+
+k      = 4
+l      = 4
+eta    = 2
+tau    = 39
+beta   = 78
+gamma1 = 2^17
+gamma2 = (q - 1) / 88
+omega  = 80
+lambda = 128
+FIPS204-STATIC-008 — ML-DSA-65 constants are correct
+
+Verify that ML-DSA-65 uses:
+
+k      = 6
+l      = 5
+eta    = 4
+tau    = 49
+beta   = 196
+gamma1 = 2^19
+gamma2 = (q - 1) / 32
+omega  = 55
+lambda = 192
+FIPS204-STATIC-009 — ML-DSA-87 constants are correct
+
+Verify that ML-DSA-87 uses:
+
+k      = 8
+l      = 7
+eta    = 2
+tau    = 60
+beta   = 120
+gamma1 = 2^19
+gamma2 = (q - 1) / 32
+omega  = 75
+lambda = 256
+FIPS204-STATIC-010 — Vector dimensions match k and l
+
+Verify that matrix dimensions, vector allocations, array lengths, and loop
+bounds consistently use the selected values of k and l.
+
+Detect:
+
+reversed matrix dimensions
+incorrect vector lengths
+hard-coded loop bounds
+allocations from another parameter set
+FIPS204-STATIC-011 — Challenge size matches lambda
+
+Verify that the encoded challenge length is:
+
+ML-DSA-44: 32 bytes
+ML-DSA-65: 48 bytes
+ML-DSA-87: 64 bytes
+Encoded object sizes
+FIPS204-STATIC-012 — ML-DSA-44 object sizes are correct
+
+Verify:
+
+Public key:  1312 bytes
+Private key: 2560 bytes
+Signature:   2420 bytes
+FIPS204-STATIC-013 — ML-DSA-65 object sizes are correct
+
+Verify:
+
+Public key:  1952 bytes
+Private key: 4032 bytes
+Signature:   3309 bytes
+FIPS204-STATIC-014 — ML-DSA-87 object sizes are correct
+
+Verify:
+
+Public key:  2592 bytes
+Private key: 4896 bytes
+Signature:   4627 bytes
+FIPS204-STATIC-015 — API length constants are consistent
+
+Verify that exported constants, macros, buffer declarations, and API
+length checks use the correct public-key, private-key, and signature sizes.
+
+FIPS204-STATIC-016 — Exact signature length is checked
+
+Verify that the verification function checks the exact signature length.
+
+Flag code that:
+
+accepts truncated signatures
+accepts extended signatures
+ignores trailing bytes
+uses only a minimum-length check
+FIPS204-STATIC-017 — Exact key lengths are checked
+
+Verify that public-key and private-key decoding require the exact encoded
+lengths defined for the selected parameter set.
+
+Hash and XOF processing
+FIPS204-STATIC-018 — Required SHAKE functions are used
+
+Verify that ML-DSA internal operations use SHAKE128 and SHAKE256 at the
+required call sites.
+
+Flag unauthorized substitution with SHA-256, SHA-512, BLAKE, or another
+hash function.
+
+FIPS204-STATIC-019 — SHAKE output lengths are explicit and correct
+
+Verify that each SHAKE invocation requests the output length required by
+the corresponding FIPS 204 procedure.
+
+Flag:
+
+hard-coded incorrect lengths
+output buffers smaller than the requested output
+use of digest-length assumptions for XOF output
+FIPS204-STATIC-020 — Incremental SHAKE is finalized correctly
+
+For incremental Keccak or SHAKE APIs, verify that the code:
+
+initializes the correct SHAKE variant
+absorbs all required inputs
+finalizes the state
+squeezes the required number of bytes
+FIPS204-STATIC-021 — Hash input order follows the algorithm
+
+Verify that seeds, identifiers, messages, contexts, counters, and encoded
+objects are absorbed in the order required by FIPS 204.
+
+Flag reordered concatenations.
+
+FIPS204-STATIC-022 — Domain separation is implemented
+
+Verify that pure ML-DSA and HashML-DSA use their required domain-separation
+values and message formatting.
+
+FIPS204-STATIC-023 — Integer fields have fixed-width encoding
+
+Verify that matrix indices, nonces, counters, and context lengths are
+encoded with the required width and byte order before being absorbed into
+SHAKE.
+
+Flag direct hashing of platform-dependent integer representations.
+
+Key generation
+FIPS204-STATIC-024 — Key-generation seed length is correct
+
+Verify that the internal key-generation procedure accepts or derives a
+32-byte seed.
+
+FIPS204-STATIC-025 — Key-generation seed expansion is correct
+
+Verify that the key-generation seed is expanded through the prescribed
+SHAKE procedure into the required internal values.
+
+FIPS204-STATIC-026 — Parameter set is bound to seed expansion
+
+Verify that the selected k and l values are included in the standardized
+seed-expansion input.
+
+FIPS204-STATIC-027 — Public matrix uses the correct seed
+
+Verify that matrix expansion derives every matrix polynomial from the
+public seed rather than from private or unrelated material.
+
+FIPS204-STATIC-028 — Matrix indices are not reversed
+
+Verify that row and column indices are absorbed in the required order
+during matrix expansion.
+
+FIPS204-STATIC-029 — Secret vectors use the correct sampler
+
+Verify that secret vectors are sampled using the required bounded
+coefficient sampler for the selected value of eta.
+
+FIPS204-STATIC-030 — Secret-sampling nonces are unique
+
+Verify that each secret polynomial receives a distinct nonce or counter
+value.
+
+Flag duplicated or reset nonces within the same key-generation operation.
+
+FIPS204-STATIC-031 — Matrix-vector multiplication dimensions are correct
+
+Verify that key generation multiplies a k × l matrix by an l-component
+secret vector and produces a k-component output vector.
+
+FIPS204-STATIC-032 — Power2Round is used during key generation
+
+Verify that the generated public vector is decomposed using the required
+Power2Round procedure.
+
+FIPS204-STATIC-033 — Public-key field order is correct
+
+Verify that the public-key encoding contains the required fields in the
+prescribed order.
+
+FIPS204-STATIC-034 — Private-key field order is correct
+
+Verify that the private-key encoding contains all required fields in the
+prescribed order.
+
+FIPS204-STATIC-035 — Public-key hash is computed from the encoded key
+
+Verify that the implementation hashes the complete encoded public key
+with the required SHAKE operation and output length.
+
+FIPS204-STATIC-036 — Randomness failure is propagated
+
+When the public key-generation API obtains its seed from a randomness
+provider, verify that failure is propagated.
+
+Flag fallback to:
+
+zero-filled seeds
+fixed seeds
+partially initialized seeds
+uninitialized memory
+Message and context processing
+FIPS204-STATIC-037 — Context length is limited to 255 bytes
+
+Verify that signing and verification reject contexts longer than 255 bytes.
+
+FIPS204-STATIC-038 — Context length is encoded in one byte
+
+Verify that the context representation contains the one-byte context
+length followed by the exact context bytes.
+
+FIPS204-STATIC-039 — Empty contexts are handled consistently
+
+Verify that the signing and verification paths encode an empty context
+using the same standardized representation.
+
+FIPS204-STATIC-040 — Signing and verification use identical formatting
+
+Verify that both paths construct the same message representative from:
+
+mode identifier
+context length
+context
+message or prehash representation
+FIPS204-STATIC-041 — Pure ML-DSA and HashML-DSA are separated
+
+Verify that the pure and prehash interfaces use distinct standardized
+message processing.
+
+Flag code that silently treats them as interchangeable.
+
+FIPS204-STATIC-042 — Prehash identifiers are validated
+
+For HashML-DSA, verify that the prehash algorithm identifier is checked
+against the set supported by the implementation.
+
+Signature generation
+FIPS204-STATIC-043 — Private-key decoding is validated before signing
+
+Verify that signing checks private-key length and field decoding before
+using the decoded values.
+
+FIPS204-STATIC-044 — Signing randomness length is correct
+
+Verify that the internal signing operation receives a 32-byte randomness
+value.
+
+FIPS204-STATIC-045 — Deterministic signing uses the standardized input
+
+Verify that deterministic signing initializes the internal randomness
+input according to FIPS 204 rather than using an undocumented custom
+derivation.
+
+FIPS204-STATIC-046 — Randomized signing requests fresh randomness
+
+Verify that randomized or hedged signing obtains fresh randomness for
+each signature.
+
+FIPS204-STATIC-047 — Signing randomness failure causes failure
+
+Flag implementations that continue signing with zeroed, repeated, or
+uninitialized randomness after the randomness provider fails.
+
+FIPS204-STATIC-048 — Message representative is derived from the correct inputs
+
+Verify that signing includes the required public-key binding, mode
+information, context, and message representation.
+
+FIPS204-STATIC-049 — Per-signature sampling seed is derived correctly
+
+Verify that the masking-vector seed is derived from the required private
+value, signing randomness, and message representative.
+
+FIPS204-STATIC-050 — Mask vector uses the standardized expansion
+
+Verify that the ephemeral vector is generated using the required
+ExpandMask procedure and the selected value of gamma1.
+
+FIPS204-STATIC-051 — Signing-attempt counter is advanced
+
+Verify that rejection-loop attempts use the required counter progression.
+
+Flag:
+
+constant counters
+counter resets inside the loop
+nonce reuse
+incorrect increment steps
+FIPS204-STATIC-052 — Commitment is calculated from the correct matrix and vector
+
+Verify that the implementation computes the commitment from the expanded
+public matrix and the ephemeral masking vector.
+
+FIPS204-STATIC-053 — High-order coefficients are encoded correctly
+
+Verify that the commitment is decomposed and that the required high-order
+components are encoded before challenge derivation.
+
+FIPS204-STATIC-054 — Challenge seed uses the correct inputs
+
+Verify that the challenge seed is derived from the message representative
+and encoded commitment.
+
+FIPS204-STATIC-055 — Challenge uses SampleInBall
+
+Verify that the challenge polynomial is derived with the standardized
+SampleInBall procedure.
+
+FIPS204-STATIC-056 — Response vector is calculated correctly
+
+Verify that the response vector combines the ephemeral vector and
+challenge-times-secret vector using the required signing equation.
+
+FIPS204-STATIC-057 — Response-vector norm bound is checked
+
+Verify that the signing loop rejects an attempt when z violates the
+required bound.
+
+Flag missing or incorrectly directed comparisons.
+
+FIPS204-STATIC-058 — Low-order coefficient bound is checked
+
+Verify that the required low-order component is checked against its
+parameter-dependent bound.
+
+FIPS204-STATIC-059 — Secondary secret-product bound is checked
+
+Verify that the challenge product involving the secondary secret vector
+is checked against the required norm bound.
+
+FIPS204-STATIC-060 — Hint generation uses the required inputs
+
+Verify that the hint vector is produced from the prescribed coefficient
+components using the standardized MakeHint procedure.
+
+FIPS204-STATIC-061 — Hint weight is limited by omega
+
+Verify that signing rejects attempts whose total hint weight exceeds
+omega.
+
+FIPS204-STATIC-062 — Rejected attempts do not return a signature
+
+Verify that every failed bound or hint check returns to the rejection loop
+rather than reaching signature encoding.
+
+FIPS204-STATIC-063 — Rejection loop updates its state
+
+Verify that a rejected attempt cannot reuse the same ephemeral vector.
+
+FIPS204-STATIC-064 — Signature field order is correct
+
+Verify that the encoded signature contains the challenge, response vector,
+and hint in the required order.
+
+Signature verification
+FIPS204-STATIC-065 — Public-key decoding is strict
+
+Verify that verification rejects an incorrectly sized or malformed
+public-key encoding.
+
+FIPS204-STATIC-066 — Signature decoding is strict
+
+Verify that malformed signatures cause immediate verification failure.
+
+FIPS204-STATIC-067 — Response-vector bound is checked before use
+
+Verify that the decoded response vector is checked against the required
+norm bound.
+
+FIPS204-STATIC-068 — Hint weight is checked
+
+Verify that the decoded hint contains no more than omega nonzero entries.
+
+FIPS204-STATIC-069 — Hint indices are canonical
+
+Verify that hint decoding rejects:
+
+duplicate indices
+non-increasing indices
+invalid delimiters
+out-of-range positions
+prohibited nonzero unused bytes
+FIPS204-STATIC-070 — Challenge length is exact
+
+Verify that the decoded challenge length matches the selected value of
+lambda.
+
+FIPS204-STATIC-071 — Verification reconstructs the same message representative
+
+Verify that verification applies the same mode, context, and message
+processing as signing.
+
+FIPS204-STATIC-072 — Public matrix is regenerated from the public seed
+
+Verify that verification expands the matrix from the seed encoded in the
+public key.
+
+FIPS204-STATIC-073 — Verification equation uses the correct operands
+
+Verify that the reconstructed commitment uses:
+
+the response vector
+the challenge polynomial
+the public-key vector
+the correct subtraction and transformation order
+FIPS204-STATIC-074 — UseHint is applied
+
+Verify that the verifier reconstructs the expected high-order coefficients
+using the standardized UseHint procedure.
+
+FIPS204-STATIC-075 — Challenge is recomputed from the required inputs
+
+Verify that the expected challenge is recomputed from the message
+representative and reconstructed commitment.
+
+FIPS204-STATIC-076 — Complete challenge is compared
+
+Verify that all challenge bytes are compared.
+
+Flag:
+
+prefix comparisons
+incorrect fixed lengths
+early success before the full comparison
+use of string functions on binary data
+FIPS204-STATIC-077 — Every failed check reaches verification failure
+
+Verify that all malformed-encoding, bound, hint, equation, and challenge
+failures propagate to an invalid-signature result.
+
+FIPS204-STATIC-078 — Malformed signatures are not normalized
+
+Flag code that repairs malformed signatures by:
+
+clamping coefficients
+sorting hint indices
+removing duplicates
+discarding trailing bytes
+replacing invalid values
+Sampling procedures
+FIPS204-STATIC-079 — Uniform sampler uses rejection sampling
+
+Verify that candidate matrix coefficients outside the accepted range are
+discarded rather than reduced modulo q.
+
+FIPS204-STATIC-080 — Uniform sampler masks candidate bits correctly
+
+Verify that candidate coefficients are constructed with the prescribed
+bit width and mask.
+
+FIPS204-STATIC-081 — Secret sampler corresponds to eta
+
+Verify that the secret-sampling code matches the selected value of eta.
+
+FIPS204-STATIC-082 — Invalid secret-sampler candidates are rejected
+
+Verify that out-of-range candidate values are discarded according to the
+standardized sampling procedure.
+
+FIPS204-STATIC-083 — ExpandMask matches gamma1
+
+Verify that packed-width selection and XOF output consumption correspond
+to the selected value of gamma1.
+
+FIPS204-STATIC-084 — SampleInBall produces distinct positions
+
+Verify that selected challenge positions cannot be repeated.
+
+FIPS204-STATIC-085 — Challenge signs come from the prescribed bitstream
+
+Verify that challenge signs are extracted from the correct XOF output
+bits.
+
+FIPS204-STATIC-086 — XOF states are reinitialized
+
+Verify that separate matrix elements, polynomials, nonces, or sampling
+operations do not unintentionally share an XOF state.
+
+Arithmetic and polynomial operations
+FIPS204-STATIC-087 — Integer widths are sufficient
+
+Verify that accumulators and intermediate variables are wide enough for:
+
+polynomial multiplication
+pointwise multiplication
+Montgomery reduction
+coefficient accumulation
+decomposition and rounding
+FIPS204-STATIC-088 — Signed and unsigned conversions preserve values
+
+Flag implicit conversions that may alter negative coefficients, modular
+representatives, bounds, or comparison results.
+
+FIPS204-STATIC-089 — NTT constants match q
+
+Verify that roots of unity, inverse factors, Montgomery constants, and
+reduction constants correspond to q = 8380417.
+
+FIPS204-STATIC-090 — Inverse NTT scaling is present
+
+Verify that the inverse transform applies the required final scaling or
+normalization.
+
+FIPS204-STATIC-091 — Pointwise multiplication uses compatible domains
+
+Verify that operands are transformed to the required representation
+before pointwise multiplication.
+
+FIPS204-STATIC-092 — Power2Round follows the prescribed decomposition
+
+Verify the formulas, constants, shifts, and coefficient representations
+used by Power2Round.
+
+FIPS204-STATIC-093 — Decompose follows the prescribed boundary behavior
+
+Inspect the implementation for special handling around gamma2, q, and
+centered representatives.
+
+FIPS204-STATIC-094 — MakeHint implements the required condition
+
+Verify that hint generation uses the exact condition defined by the
+coefficient decomposition.
+
+FIPS204-STATIC-095 — UseHint implements wraparound correctly
+
+Verify that hint application handles increment, decrement, and modular
+wraparound according to the selected gamma2.
+
+FIPS204-STATIC-096 — Norm checks use exact inequalities
+
+Verify every boundary comparison for the correct use of:
+
+<
+<=
+>
+>=
+
+Flag likely off-by-one errors.
+
+Encoding and decoding
+FIPS204-STATIC-097 — Packed coefficient widths are correct
+
+Verify that each encoded polynomial type uses the bit width required by
+its coefficient range.
+
+FIPS204-STATIC-098 — Signed coefficients are mapped before packing
+
+Verify that centered or signed coefficients are converted to their
+required nonnegative encoded representation.
+
+FIPS204-STATIC-099 — Packing masks preserve all required bits
+
+Inspect masks, shifts, and casts for possible truncation or lost high bits.
+
+FIPS204-STATIC-100 — Byte and bit ordering is consistent
+
+Verify that packing and unpacking use the required byte and bit order.
+
+FIPS204-STATIC-101 — Decoded coefficients are range checked
+
+Verify that noncanonical or out-of-range encoded values are rejected where
+required.
+
+FIPS204-STATIC-102 — Truncated inputs cannot cause out-of-bounds reads
+
+Verify that the decoder checks input length before every fixed-offset or
+bit-packed read.
+
+FIPS204-STATIC-103 — Extra input bytes are not ignored
+
+Verify that exact-length encoded objects are not accepted with appended
+data.
+
+FIPS204-STATIC-104 — Packing writes remain within output buffers
+
+Verify that byte offsets and bit writes remain within the declared
+public-key, private-key, and signature buffers.
+
+API and failure handling
+FIPS204-STATIC-105 — Key-generation API is present
+
+Detect an operation corresponding to ML-DSA key generation.
+
+FIPS204-STATIC-106 — Signing API is present
+
+Detect an operation corresponding to ML-DSA signature generation.
+
+FIPS204-STATIC-107 — Verification API is present
+
+Detect an operation corresponding to ML-DSA signature verification.
+
+FIPS204-STATIC-108 — Parameter set is bound to API objects
+
+Flag APIs that can accidentally mix keys, signatures, or constants from
+different parameter sets.
+
+FIPS204-STATIC-109 — External lengths are validated before access
+
+Verify checks for all caller-provided lengths, including:
+
+keys
+signatures
+messages
+contexts
+prehash values
+output buffers
+FIPS204-STATIC-110 — Null pointers are validated
+
+Verify that externally callable operations check required pointers before
+dereferencing them.
+
+FIPS204-STATIC-111 — Failure paths propagate to the caller
+
+Verify that key-generation, signing, decoding, randomness, and verification
+failures cannot be overwritten or ignored.
+
+FIPS204-STATIC-112 — Verification result is unambiguous
+
+Verify that the API clearly distinguishes valid and invalid signatures.
+
+FIPS204-STATIC-113 — Output lengths are safe on failure
+
+Verify that output-length variables are not left indicating a valid key or
+signature after an operation fails.
