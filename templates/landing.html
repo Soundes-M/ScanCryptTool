@@ -59,11 +59,6 @@
       </div>
 
       <div class="nav-links">
-        <a href="http://192.168.0.154:5000/">{{ t.nav_news }}</a>
-        <a href="/services">{{ t.nav_services }}</a>
-        <a href="/about">{{ t.nav_about }}</a>
-        <a href="/pricing">{{ t.nav_pricing }}</a>
-        <a href="/contact">{{ t.nav_contact }}</a>
       </div>
       <div class="nav-actions">
         <a class="lang" href="?lang={{ other_lang }}" title="{{ other_lang_title }}">
@@ -74,7 +69,6 @@
           </svg>
           {{ other_lang_label }}
         </a>
-        <a class="login-button" href="/login">Login</a>
       </div>
     </header>
 
@@ -103,7 +97,7 @@
           <section class="action-card">
             <h3>Security Analysis</h3>
             <div class="status-tag">⏳ Ongoing</div>
-            <p>Find vulnerabilities in an existing ML-DSA or ML-KEM implementation.</p>
+            <p>Perform a structured security assessment of an existing ML-DSA or ML-KEM implementation.</p>
             <ul>
               <li>Detect implementation</li>
               <li>Run security rules</li>
@@ -117,6 +111,7 @@
 
           <section class="action-card">
             <h3>Secure Assembly Generation</h3>
+            <div class="status-tag">⏳ Ongoing</div>
             <p>Transform supported C routines into hardened assembly code.</p>
             <ul>
               <li>Select target architecture</li>
@@ -124,7 +119,9 @@
               <li>Generate assembly</li>
               <li>Explain transformations</li>
             </ul>
-            <a class="action-btn" href="/assembly"><button class="btn btn-primary">{{ t.cta_start }}</button></a>
+            <span class="action-btn" title="Secure Assembly Generation is ongoing">
+              <button class="btn btn-primary btn-disabled" type="button" disabled>🔒 {{ t.cta_start }}</button>
+            </span>
           </section>
         </div>
 
